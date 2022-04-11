@@ -23,9 +23,7 @@
     <a href="https://doi.org/10.1016/j.jcp.2015.12.052">
     <img src="https://img.shields.io/badge/DOI-10.1016%2Fj.jcp.2015.12.052-blue"
 	     alt="DOI"></a>
-    <a href="https://twitter.com/intent/tweet?text=SequentiAL parTiclE Deposition: &url=https%3A%2F%2Fgithub.com%2Fvsangelidakis%2FSALTED">
-    <img src="https://img.shields.io/twitter/url/https/github.com/vsangelidakis/SALTED.svg?style=flat-square&logo=twitter"
-         alt="GitHub tweet">
+
 </p>
 ---
 
