@@ -4,6 +4,7 @@
 <p align="center">
   <a href="#what-is-salted">What is SALTED</a> •
   <a href="#examples">Examples</a> •
+  <a href="#share-your-own-ideas">Share your own ideas</a> •
   <a href="#acknowledging-salted">Acknowledging SALTED</a>
 </p>
 <p align="center">
