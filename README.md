@@ -1,6 +1,31 @@
 # SALTED
- Sequential Particle Deposition
+<h2 align="center">SequentiAL parTiclE Deposition</a></h2>
 
+<p align="center">
+  <a href="#what-is-salted">What is SALTED</a> •
+  <a href="#examples">Examples</a> •
+  <a href="#acknowledging-salted">Acknowledging SALTED</a>
+</p>
+<p align="center">
+    <a href="https://github.com/vsangelidakis/SALTED/commits/master">
+    <img src="https://img.shields.io/github/last-commit/vsangelidakis/SALTED.svg?style=flat-square&logo=github&logoColor=white"
+         alt="GitHub last commit">
+    <a href="https://github.com/vsangelidakis/SALTED/issues">
+    <img src="https://img.shields.io/github/issues-raw/vsangelidakis/SALTED.svg?style=flat-square&logo=github&logoColor=white"
+         alt="GitHub issues">
+    <a href="https://github.com/vsangelidakis/SALTED/pulls">
+    <img src="https://img.shields.io/github/issues-pr-raw/vsangelidakis/SALTED.svg?style=flat-square&logo=github&logoColor=white"
+         alt="GitHub pull requests">
+    <a href="https://opensource.org/licenses/GPL-3.0">
+    <img src="https://img.shields.io/badge/license-GPL-blue.svg"
+         alt="License">
+    <a href="https://doi.org/10.5281/zenodo.4001670">
+    <img src="https://zenodo.org/badge/DOI/10.5281/zenodo.4001670.svg"
+	     alt="DOI"></a>
+    <a href="https://twitter.com/intent/tweet?text=SequentiAL parTiclE Deposition: &url=https%3A%2F%2Fgithub.com%2Fvsangelidakis%2FSALTED">
+    <img src="https://img.shields.io/twitter/url/https/github.com/vsangelidakis/SALTED.svg?style=flat-square&logo=twitter"
+         alt="GitHub tweet">
+</p>
 ---
 
 ## What is SALTED?
@@ -21,7 +46,7 @@ SALTED can generate packings with complex particles of any shape, as demonstrate
 
 
 ## Acknowledging SALTED
-Topic, N. and Pöschel, T., 2016. Steepest descent ballistic deposition of complex shaped particles. Journal of Computational Physics, 308, pp.421-437.
+Topic, N. and Pöschel, T., 2016. Steepest descent ballistic deposition of complex shaped particles. Journal of Computational Physics, 308, pp. 421-437.
 
 [//]: <> (<h4 align="center">2022 © Vasileios Angelidakis, Nikola Topic, Thorsten Poeschel. Institute for Multiscale Simulation, FAU, Germany </a></h4>)
 
