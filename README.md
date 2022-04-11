@@ -46,8 +46,8 @@ SALTED can generate packings with complex particles of any shape, as demonstrate
 
 
 ## Share your own ideas
-SALTED has been developed in the context of several doctoral projects at the Institute for Multiscale Simulation (MSS) of the Friedrich-Alexander-Universität Erlangen-Nürnberg.
-Being the product of collaborative and work, it is hoped that SALTED will keep being developed by its user-base, alongside the main developing team. The intention of the developers is that SALTED will be of use to researchers and practitioners alike, who venture into the simulation of particulate systems with complex particles. Expanding the code-base, proposing improvements and reporting issues are just some of the actions that can contribute towards improving this software.
+SALTED has been developed in the context of several doctoral projects at the [Institute for Multiscale Simulation (MSS)](mss.cbi.fau.de/) of the Friedrich-Alexander-Universität Erlangen-Nürnberg.
+Being the product of collaborative work, it is hoped that SALTED will keep being developed by its user-base, alongside the main developing team. The intention of the developers is that SALTED will be of use to researchers and practitioners alike, who venture into the simulation of particulate systems with complex particles. Expanding the code-base, proposing improvements and reporting issues are just some of the actions that can contribute towards improving this software.
 
 ## Acknowledging SALTED
 Topic, N. and Pöschel, T., 2016. Steepest descent ballistic deposition of complex shaped particles. Journal of Computational Physics, 308, pp. 421-437.
