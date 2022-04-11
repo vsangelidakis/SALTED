@@ -1,12 +1,5 @@
 # SALTED
 <h2 align="center">SequentiAL parTiclE Deposition</a></h2>
-
-<p align="center">
-  <a href="#what-is-salted">What is SALTED</a> •
-  <a href="#examples">Examples</a> •
-  <a href="#share-your-own-ideas">Share your own ideas</a> •
-  <a href="#acknowledging-salted">Acknowledging SALTED</a>
-</p>
 <p align="center">
     <a href="https://github.com/vsangelidakis/SALTED/commits/master">
     <img src="https://img.shields.io/github/last-commit/vsangelidakis/SALTED.svg?style=flat-square&logo=github&logoColor=white"
@@ -26,6 +19,12 @@
     <a href="https://twitter.com/intent/tweet?text=SequentiAL parTiclE Deposition: &url=https%3A%2F%2Fgithub.com%2Fvsangelidakis%2FSALTED">
     <img src="https://img.shields.io/twitter/url/https/github.com/vsangelidakis/SALTED.svg?style=flat-square&logo=twitter"
          alt="GitHub tweet">
+</p>
+<p align="center">
+  <a href="#what-is-salted">What is SALTED</a> •
+  <a href="#examples">Examples</a> •
+  <a href="#share-your-own-ideas">Share your own ideas</a> •
+  <a href="#acknowledging-salted">Acknowledging SALTED</a>
 </p>
 ---
 
