@@ -11,7 +11,7 @@ SALTED is an efficient, open-source, event-driven algorithm for sequential balli
 SALTED can generate packings with complex particles of any shape, as demonstrated in Topic and Poeschel (2016).
 
 <figure>
-	<img src="figures/Topic_and_Poeschel_2016 - Figure_13.png" alt="drawing" width="1000"/>
+	<img src="figures/case_studies.png" alt="drawing" width="1000"/>
 	<figcaption> Fig. Packing of complex particles simulated with SALTED. Case studies for a) coins, b) ellipsoids, c) tetrapods, d) spirals and e) rods.
 </figcaption>
 </figure>
