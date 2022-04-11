@@ -46,7 +46,7 @@ SALTED can generate packings with complex particles of any shape, as demonstrate
 
 
 ## Share your own ideas
-The SALTED software package has been developed in the context of several doctoral projects at the [Institute for Multiscale Simulation](/mss.cbi.fau.de/) of the Friedrich-Alexander-Universität Erlangen-Nürnberg.
+The SALTED software package has been developed in the context of several doctoral projects at the  of the Friedrich-Alexander-Universität Erlangen-Nürnberg.
 Being the product of collaborative work, it is hoped that SALTED will keep being developed by its user-base, alongside the main developing team. The intention of the developers is that SALTED will be of use to researchers and practitioners alike, who venture into the simulation of particulate systems with complex particles. Expanding the code-base, proposing improvements and reporting issues are just some of the actions that can contribute towards improving this software.
 
 ## Acknowledging SALTED
