@@ -1,4 +1,4 @@
-<p align="center"><img width=60% src="https://github.com/vsangelidakis/SALTED/blob/master/figures/SALTED_logo.svg"></p>
+<p align="center"><img width=60% src="https://github.com/vsangelidakis/SALTED/blob/master/figures/SALTED_logo_dark.svg"></p>
 <h2 align="center">SequentiAL parTiclE Deposition</a></h2>
 <p align="center">
     <a href="https://github.com/vsangelidakis/SALTED/commits/master">
