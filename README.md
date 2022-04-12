@@ -1,4 +1,4 @@
-# SALTED
+<p align="center"><img width=50% src="https://github.com/vsangelidakis/SALTED/blob/master/figures/SALTED_logo.svg"></p>
 <h2 align="center">SequentiAL parTiclE Deposition</a></h2>
 <p align="center">
     <a href="https://github.com/vsangelidakis/SALTED/commits/master">
@@ -26,6 +26,7 @@
   <a href="#share-your-own-ideas">Share your own ideas</a> •
   <a href="#acknowledging-salted">Acknowledging SALTED</a>
 </p>
+
 ---
 
 ## What is SALTED?

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="1280"
+   height="720"
+   overflow="hidden"
+   version="1.1"
+   id="svg19"
+   sodipodi:docname="SALTED_logo.svg"
+   inkscape:version="1.0.2-2 (e86c870879, 2021-01-15)">
+  <metadata
+     id="metadata23">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1600"
+     inkscape:window-height="837"
+     id="namedview21"
+     showgrid="false"
+     inkscape:zoom="0.828125"
+     inkscape:cx="640"
+     inkscape:cy="360"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg19" />
+  <defs
+     id="defs9">
+    <clipPath
+       id="clip0">
+      <rect
+         x="0"
+         y="0"
+         width="1280"
+         height="720"
+         id="rect2" />
+    </clipPath>
+    <image
+       width="64"
+       height="64"
+       xlink:href="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsKCwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCABAAEADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDpa/S6iivbzLMv7Q5Pc5eW/W+9vJdjxsuy76hz+/zc1ultr+b7hRRRXiHshRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAfmjX6XUUV7eZZl/aHJ7nLy3633t5LseNl2XfUOf3+bmt0ttfzfcKKKK8Q9kKKKKACiiigAooooAKKKKAP/9k="
+       preserveAspectRatio="none"
+       id="img1" />
+    <pattern
+       width="64"
+       height="64"
+       patternUnits="userSpaceOnUse"
+       id="pattern2"
+       overflow="hidden"
+       patternTransform="matrix(0.125 0 0 0.125 224 240)">
+      <use
+         width="100%"
+         height="100%"
+         xlink:href="#img1"
+         id="use6" />
+    </pattern>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath860">
+      <rect
+         style="opacity:0.85;fill:#181c57;fill-opacity:0.913725;stroke:#7a91a6;stroke-width:1.333;stroke-opacity:0"
+         id="rect862"
+         width="813.88672"
+         height="200.45285"
+         x="234.26414"
+         y="257.20755" />
+    </clipPath>
+  </defs>
+  <g
+     id="g856"
+     clip-path="url(#clipPath860)">
+    <g
+       clip-path="url(#clip0)"
+       id="g17">
+      <rect
+         x="0"
+         y="0"
+         width="1280"
+         height="720"
+         fill="#FFFFFF"
+         id="rect11" />
+      <path
+         d="M447.469 324.098 432.625 372.047 462.312 372.047ZM928.062 309.84 928.062 400.856 928.746 400.856C936.949 400.856 943.866 400.709 949.498 400.416 955.13 400.123 960.484 398.382 965.562 395.191 971.552 391.415 976.109 386.207 979.234 379.566 982.359 372.926 983.922 364.82 983.922 355.25 983.922 345.68 982.278 337.493 978.99 330.69 975.702 323.886 970.641 318.564 963.805 314.723 958.857 311.988 953.665 310.491 948.228 310.231 942.792 309.97 936.298 309.84 928.746 309.84ZM891.539 282.691 936.656 282.691C946.878 282.691 956.448 283.342 965.367 284.645 974.286 285.947 982.652 289.104 990.465 294.117 1000.04 300.237 1007.59 308.489 1013.12 318.873 1018.65 329.257 1021.42 341.481 1021.42 355.543 1021.42 369.085 1018.46 381.21 1012.54 391.92 1006.61 402.63 999.124 410.849 990.074 416.578 982.522 421.461 974.303 424.602 965.416 426.002 956.529 427.402 947.073 428.102 937.047 428.102L891.539 428.102ZM768.539 282.691 866.879 282.691 866.879 310.426 804.867 310.426 804.867 335.914 861.996 335.914 861.996 363.648 804.867 363.648 804.867 400.367 866.879 400.367 866.879 428.102 768.539 428.102ZM630.5 282.691 752.961 282.691 752.961 310.426 709.992 310.426 709.992 428.102 673.469 428.102 673.469 310.426 630.5 310.426ZM531.539 282.691 568.062 282.691 568.062 400.367 628.609 400.367 628.609 428.102 531.539 428.102ZM428.035 282.691 467.879 282.691 517 428.102 479.402 428.102 470.32 398.414 424.617 398.414 415.535 428.102 378.914 428.102ZM320.957 280.055C329.616 280.055 338.226 280.934 346.787 282.691 355.348 284.449 363.014 286.826 369.785 289.82L369.785 323.023 366.562 323.023C361.159 318.401 354.567 314.495 346.787 311.305 339.007 308.115 331.016 306.52 322.812 306.52 319.622 306.52 316.758 306.747 314.219 307.203 311.68 307.659 309.01 308.538 306.211 309.84 303.932 310.882 301.963 312.428 300.303 314.479 298.643 316.529 297.812 318.824 297.812 321.363 297.812 325.074 299.131 328.02 301.768 330.201 304.404 332.382 309.499 334.352 317.051 336.109 321.934 337.216 326.637 338.29 331.162 339.332 335.687 340.374 340.521 341.806 345.664 343.629 355.755 347.275 363.258 352.174 368.174 358.326 373.089 364.479 375.547 372.6 375.547 382.691 375.547 397.145 369.867 408.766 358.506 417.555 347.145 426.344 331.797 430.738 312.461 430.738 301.328 430.738 291.546 429.664 283.115 427.516 274.684 425.367 266.855 422.698 259.629 419.508L259.629 384.938 262.949 384.938C270.241 391.122 278.281 395.875 287.07 399.195 295.859 402.516 304.388 404.176 312.656 404.176 314.74 404.176 317.49 403.948 320.908 403.492 324.326 403.036 327.077 402.32 329.16 401.344 331.699 400.237 333.848 398.691 335.605 396.705 337.363 394.719 338.242 392.099 338.242 388.844 338.242 385.198 336.81 382.236 333.945 379.957 331.081 377.678 327.663 376.018 323.691 374.977 318.743 373.675 313.454 372.438 307.822 371.266 302.191 370.094 296.934 368.662 292.051 366.969 280.788 362.997 272.715 357.659 267.832 350.953 262.949 344.247 260.508 335.849 260.508 325.758 260.508 312.151 266.27 301.132 277.793 292.701 289.316 284.27 303.704 280.055 320.957 280.055Z"
+         stroke="#3B3838"
+         stroke-width="2"
+         stroke-linejoin="round"
+         stroke-miterlimit="10"
+         fill="url(#pattern2)"
+         fill-rule="evenodd"
+         id="path13" />
+      <text
+         fill="#000000"
+         fill-opacity="0"
+         font-family="Arial,Arial_MSFontService,sans-serif"
+         font-size="150.684"
+         x="259.629"
+         y="411.903"
+         id="text15">SALTED</text>
+    </g>
+  </g>
+</svg>
