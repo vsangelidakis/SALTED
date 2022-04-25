@@ -1,0 +1,21 @@
+N: 1000
+
+nx: 25
+ny: 25
+nz: 5000
+dx: 120
+dy: 120
+dz: 120
+
+xo: 0
+yo: 0
+zo: -1000
+
+phi: 0.01
+
+cmsfile: cms/cms
+positonsfile: positions/positions
+detailsfile: details/state
+
+
+
