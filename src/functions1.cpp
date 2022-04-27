@@ -1,14 +1,16 @@
 #include "functions1.h"
 #include "common.h"
 
-void initrand()//initalisation of random number generator (appart form seed)
+// initalises random number generator (apart from seed)
+void initrand()
 {
 	gsl_rng_env_setup();
 	T = gsl_rng_default;
 	r = gsl_rng_alloc (T);
 }
 
-void load_parameters(const char* inputfile)//reads file with input parameters
+// reads file with input parameters
+void load_parameters(const char* inputfile)
 {
 	string s1,s2,s3,s4,s5,s6;
 	ifstream myfile(inputfile);
@@ -36,7 +38,7 @@ void load_parameters(const char* inputfile)//reads file with input parameters
 	myfile>>s1>>phi;
 	assert(s1=="phi:");
 
-	//Output files
+	// Output files
 
 	myfile>>s1>>cmsfile>>s2>>positionsfile>>s4>>detailsfile;
 	assert(s1=="cmsfile:"&&s2=="positonsfile:"&&s4=="detailsfile:");
@@ -46,7 +48,7 @@ void load_parameters(const char* inputfile)//reads file with input parameters
 
 
 
-//calculates the center of mass of the packing
+// calculates the center of mass of the packing
 vtype cmass(const vector<vtype>& r, const vector<long double>& R)
 {
 	int i;long double mc=0,r3;vtype res=null;
@@ -60,7 +62,7 @@ vtype cmass(const vector<vtype>& r, const vector<long double>& R)
 	return res;
 }
 
-// calculates the mass of the packing assuming that sphere with radius 30 has unit mass.
+// calculates the mass of the packing assuming that sphere with radius 30 has unit mass
 long double mass(const vector<vtype>& r, const vector<long double>& R)
 {
 	int i;long double m=0;
@@ -73,8 +75,8 @@ long double mass(const vector<vtype>& r, const vector<long double>& R)
 	return m;
 }
 
-
-int checkinters(surroundtype& su)//calcuates the number of overlaps in the sediment
+// calculates the number of overlaps in the sediment
+int checkinters(surroundtype& su) 
 {
 	int count=0;
 	for(int ix=0;ix<nx;ix++)
@@ -114,7 +116,7 @@ int checkinters(surroundtype& su)//calcuates the number of overlaps in the sedim
 }
 
 
-//calculates the number of overlaps between the cluster spheres and the sediment
+// calculates the number of overlaps between the cluster spheres and the sediment
 bool checkinters(const clustertype& c,const surroundtype& s)
 {
 	for(int i=0;i<c.r.size();i++)
@@ -151,7 +153,7 @@ bool checkinters(const clustertype& c,const surroundtype& s)
 }
 
 
-//finds number of contact that the cluster has with the surroundings
+// finds number of contacts that the cluster has with its surroundings
 void find_cluster_contacts(long double eps_contact,const clustertype& c,const surroundtype& su,vector<vtype>& rps,vector<vtype>& rds,vector<int>& p,vector<int>& d)
 {
 	for(int i=0;i<c.r.size();i++)
@@ -193,7 +195,7 @@ void find_cluster_contacts(long double eps_contact,const clustertype& c,const su
 }
 
 
-//add the cluster c to the fixed particles
+// adds the cluster c to the fixed particles
 void unload(clustertype& c,surroundtype& su)
 {
 	vtype v;
@@ -204,6 +206,7 @@ void unload(clustertype& c,surroundtype& su)
 		unloadsphere(vmod(c.r[i],lx,ly),ii,c.R[i],su);
 	}
 }
+
 
 void unloadsphere(const vtype& v,int ii,long double R,surroundtype& su)
 {

@@ -1,1 +1,3 @@
 src_BACKUP_2022_04_25
+*.o
+src/deposit

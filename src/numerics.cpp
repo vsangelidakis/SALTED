@@ -1,7 +1,7 @@
 
 #include "numerics.h"
 
-bool pcontact0(vtype r1,long double R1,vtype r2,long double R2,long double& dtl)//finds translation length for collision of one sphere with another fixed sphere, section 3.1 of the paper
+bool pcontact0(vtype r1,long double R1,vtype r2,long double R2,long double& dtl) // finds translation length for collision of one sphere with another fixed sphere, section 3.1 of the paper
 {
 	long double ds,ds2,dl,zc;
 
@@ -15,24 +15,24 @@ bool pcontact0(vtype r1,long double R1,vtype r2,long double R2,long double& dtl)
 	else return false;
 }
 
-bool pcontact(vtype rp,const vtype& n,vtype rc,long double Rc,vtype rs,long double Rs,rotinftype& rotinf1,rotinftype& rotinf2)//solution for situation in Fig 5 of the paper.
+bool pcontact(vtype rp,const vtype& n,vtype rc,long double Rc,vtype rs,long double Rs,rotinftype& rotinf1,rotinftype& rotinf2) // solution for situation in Fig 5 of the paper.
 {
 	vtype rci=rc,rpi=rp,rsi=rs;
 	long double R=Rc+Rs;
-	rp=rp+s(rc-rp,n)*n;//move reference point to the plane
-	vtype rsp=rs+s(rp-rs,n)*n;//projection point of surround sphere to the plain
-	if(norm(rp-rsp)<eps) return false;//no contact if they are exactly on the line
+	rp=rp+s(rc-rp,n)*n; // move reference point to the plane
+	vtype rsp=rs+s(rp-rs,n)*n; // projection point of surround sphere to the plain
+	if(norm(rp-rsp)<eps) return false; // no contact if they are exactly on the line
 	if(norm2(rsp-rs)<R*R)
 	{
-		rc=rc-rp;//moving to rp as coordinate system beginning
+		rc=rc-rp; // moving to rp as coordinate system beginning
 		rsp=rsp-rp;
 		rs=rs-rp;
 
-		long double Rsp=sqrt(R*R-norm2(rsp-rs));//diameters
+		long double Rsp=sqrt(R*R-norm2(rsp-rs)); // diameters
 		long double Rcd=norm(rc);
 		if(norm2(rsp)<(Rsp+Rcd)*(Rsp+Rcd))
 		{
-			vtype ext=rsp;ext=1/norm(ext)*ext;//orts of new system
+			vtype ext=rsp;ext=1/norm(ext)*ext; // orts of new system
 			vtype eyt=v(n,ext);eyt=1/norm(eyt)*eyt;
 			vtype ezt=n;
 			matrix m(ext,eyt,ezt);
@@ -43,7 +43,7 @@ bool pcontact(vtype rp,const vtype& n,vtype rc,long double Rc,vtype rs,long doub
 				v2=ma(m,v2);
 				v1=1/norm(v1)*v1;
 				v2=1/norm(v2)*v2;
-				rc=1/norm(rc)*rc;//rc is not needed anymore except as an ort
+				rc=1/norm(rc)*rc; // rc is not needed anymore except as an ort
 
 				rotinf1.n=n;
 				rotinf1.cc=s(rc,v1);
@@ -72,7 +72,7 @@ bool pcontact(vtype rp,const vtype& n,vtype rc,long double Rc,vtype rs,long doub
 	else return false;
 }
 
-bool circle_intersect(long double Rcd,long double Rsp,long double d,vtype& v1,vtype& v2)//intersection between two circles one at (0,0) another at (d,0)
+bool circle_intersect(long double Rcd,long double Rsp,long double d,vtype& v1,vtype& v2) // contact detection between two circles one at (0,0) another at (d,0)
 {
 	if(fabs(Rcd-Rsp)<fabs(d)&&fabs(Rcd+Rsp)>fabs(d))
 	{
@@ -93,7 +93,7 @@ bool circle_intersect(long double Rcd,long double Rsp,long double d,vtype& v1,vt
 }
 
 
-bool pcontact1(vtype rp,vtype cmo,vtype rcb,long double Rcb,vtype rsb,long double Rsb,rotinftype& rotinf1,rotinftype& rotinf2)//adapts the function pcontact for collision of one sphere with fixed, whilec cluster is rolling on one contact
+bool pcontact1(vtype rp,vtype cmo,vtype rcb,long double Rcb,vtype rsb,long double Rsb,rotinftype& rotinf1,rotinftype& rotinf2) // adapts the function pcontact for collision of one sphere with fixed, whilec cluster is rolling on one contact
 {
 	vtype ns;
 	ns=v(ez,cmo-rp);ns=(1/norm(ns))*ns;
@@ -102,7 +102,7 @@ bool pcontact1(vtype rp,vtype cmo,vtype rcb,long double Rcb,vtype rsb,long doubl
 	return happens;
 }
 
-void tohorizontal(const vtype& cm,const vtype& rc,const vtype& rs,rotinftype& rotinf)//see section 3.2.3 of the paper
+void tohorizontal(const vtype& cm,const vtype& rc,const vtype& rs,rotinftype& rotinf) // see section 3.2.3 of the paper
 {
 	vtype n=v(ez,cm-rs);n=(1/norm(n))*n;
 	vtype rd=rc-rs;
@@ -114,7 +114,7 @@ void tohorizontal(const vtype& cm,const vtype& rc,const vtype& rs,rotinftype& ro
 }
 
 
-void tobelow1(const vtype& cm,const vtype& rp,rotinftype& rotinf)//see section 3.2.4 of the paper
+void tobelow1(const vtype& cm,const vtype& rp,rotinftype& rotinf) // see section 3.2.4 of the paper
 {
 	assert(cm.x()!=rp.x()||cm.y()!=rp.y());
 	vtype cmr=cm-rp;
@@ -127,7 +127,7 @@ void tobelow1(const vtype& cm,const vtype& rp,rotinftype& rotinf)//see section 3
 }
 
 
-bool toground1(const vtype&rs,vtype cm,vtype rc,const long double Rc,rotinftype& rotinf1,rotinftype& rotinf2)//see section 3.2.5 of the paper
+bool toground1(const vtype&rs,vtype cm,vtype rc,const long double Rc,rotinftype& rotinf1,rotinftype& rotinf2) // see section 3.2.5 of the paper
 {
 	vtype n=v(ez,cm-rs);n=(1/norm(n))*n; 
 
@@ -162,14 +162,14 @@ bool toground1(const vtype&rs,vtype cm,vtype rc,const long double Rc,rotinftype&
 	return false;
 }
 
-long double g(const vtype& rp, const vtype& cm, const vtype& rc, const vtype& rs)//determines how "fast" rc is moving towards of away from rs, rotation on one contact
+long double g(const vtype& rp, const vtype& cm, const vtype& rc, const vtype& rs) // determines how "fast" rc is moving towards of away from rs, rotation on one contact
 {
 	vtype cmr=cm-rp;
 	vtype n=v(ez,cmr);n=(1/norm(n))*n;
 	return s(v(n,(rc-rp)),rc-rs)/(norm(rc-rp)*norm(rc-rs));
 }
 
-vtype grad(const vtype& rp,const vtype& cm)//direction of motion of center of mass when moving on one contact
+vtype grad(const vtype& rp,const vtype& cm) // direction of motion of center of mass when moving on one contact
 {
 	vtype cmr=cm-rp;
 	vtype n=v(ez,cmr);
@@ -178,19 +178,19 @@ vtype grad(const vtype& rp,const vtype& cm)//direction of motion of center of ma
 	return gr;
 }
 
-bool pcontact2(const vtype& rp1,const vtype& rp2,const vtype& cm,const vtype& rc,const long double Rcb,const vtype& rs,const long double Rsb,rotinftype& rotinf1,rotinftype& rotinf2)//adapts the function pcontact for collision of one sphere with fixed, whilec cluster is rolling on two contacts, section 3.3.2 of the paper
+bool pcontact2(const vtype& rp1,const vtype& rp2,const vtype& cm,const vtype& rc,const long double Rcb,const vtype& rs,const long double Rsb,rotinftype& rotinf1,rotinftype& rotinf2) // adapts the function pcontact for collision of one sphere with fixed, whilec cluster is rolling on two contacts, section 3.3.2 of the paper
 {
 	vtype n=rp2-rp1;n=(1/norm(n))*n;
 	if(s(ez,v(n,cm-rp1))>0) n=-1*n;
 	return pcontact(rp1,n,rc,Rcb,rs,Rsb,rotinf1,rotinf2);
 }
 
-bool pdisconnect(vtype cm,vtype rp1,vtype rp2,vtype rd1,vtype rd2,rotinftype& rotinf1,rotinftype& rotinf2) //section 3.3.3 of the paper
+bool pdisconnect(vtype cm,vtype rp1,vtype rp2,vtype rd1,vtype rd2,rotinftype& rotinf1,rotinftype& rotinf2) // section 3.3.3 of the paper
 {
 	vtype n=rp2-rp1;n=(1/norm(n))*n;
-	if(s(ez,v(n,cm-rp1))>0) n=-1*n;//in order to have cos>0 and sin>0 for small rotatons
+	if(s(ez,v(n,cm-rp1))>0) n=-1*n; // in order to have cos>0 and sin>0 for small rotatons
 
-	//all relative to rp1
+	// all relative to rp1
 	rp2-=rp1;
 	rd1-=rp1;
 	rd2-=rp1;
@@ -219,7 +219,7 @@ bool pdisconnect(vtype cm,vtype rp1,vtype rp2,vtype rd1,vtype rd2,rotinftype& ro
 	return false;
 }
 
-bool tohorizontal2(const vtype& rp1,const vtype& rp2,const vtype& cm,const vtype& rd1,rotinftype& rotinf1,rotinftype& rotinf2)//section 3.3.4 of the paper
+bool tohorizontal2(const vtype& rp1,const vtype& rp2,const vtype& cm,const vtype& rd1,rotinftype& rotinf1,rotinftype& rotinf2) // section 3.3.4 of the paper
 {
 	vtype n=rp2-rp1;n=(1/norm(n))*n;
 	if(s(ez,v(n,cm-rp1))>0) n=-1*n;
@@ -250,7 +250,7 @@ bool tohorizontal2(const vtype& rp1,const vtype& rp2,const vtype& cm,const vtype
 	else return false;
 }
 
-void tobelow2(const vtype& cm,const vtype& rp1,const vtype& rp2,rotinftype& rotinf)///section 3.3.5 of the paper
+void tobelow2(const vtype& cm,const vtype& rp1,const vtype& rp2,rotinftype& rotinf) // /section 3.3.5 of the paper
 {
 	vtype cmr=cm-rp1;
 	vtype n=rp2-rp1;n=(1/norm(n))*n;
@@ -279,7 +279,7 @@ void tobelow2(const vtype& cm,const vtype& rp1,const vtype& rp2,rotinftype& roti
 	if(fabs(s(nim,ez))>weps) ds("Warning: tobelow2: rotated position not in vertical plane, s(nim,ez)=",s(nim,ez));
 }
 
-bool toground2(const vtype& rp1,vtype rp2,const vtype& cm, vtype rc,const long double Rc,rotinftype& rotinf1,rotinftype& rotinf2)//section 3.3.6 of the paper
+bool toground2(const vtype& rp1,vtype rp2,const vtype& cm, vtype rc,const long double Rc,rotinftype& rotinf1,rotinftype& rotinf2) // section 3.3.6 of the paper
 {
 	vtype n=rp2-rp1;n=(1/norm(n))*n;
 	if(s(ez,v(n,cm-rp1))>0) n=-1*n;
@@ -315,7 +315,7 @@ bool toground2(const vtype& rp1,vtype rp2,const vtype& cm, vtype rc,const long d
 }
 
 
-long double g2(const vtype& rp1,const vtype& rp2,const vtype& cm,const vtype& rc,const vtype& rs)//analog of g for two contacts
+long double g2(const vtype& rp1,const vtype& rp2,const vtype& cm,const vtype& rc,const vtype& rs) // analog of g for two contacts
 {
 	vtype n=rp2-rp1;n=(1/norm(n))*n;
 	if(s(ez,v(n,cm-rp1))>0) n=-1*n;
@@ -323,7 +323,7 @@ long double g2(const vtype& rp1,const vtype& rp2,const vtype& cm,const vtype& rc
 	return s(g,rc-rs)/norm(rc-rs);
 }
 
-vtype grad2(const vtype& rp1,const vtype& rp2,const vtype& cm)//analog of grad for two contacts
+vtype grad2(const vtype& rp1,const vtype& rp2,const vtype& cm) // analog of grad for two contacts
 {
 	vtype n=rp2-rp1;
 	vtype cmr=cm-rp1;
@@ -332,7 +332,7 @@ vtype grad2(const vtype& rp1,const vtype& rp2,const vtype& cm)//analog of grad f
 	return g;
 }
 
-bool rightside(const vtype& cmr,const vtype& cmcr,const vtype n)//determines whether center of mass is on the same side of a vertical plane containg rotation axis, before and after the rotation
+bool rightside(const vtype& cmr,const vtype& cmcr,const vtype n) // determines whether center of mass is on the same side of a vertical plane containg rotation axis, before and after the rotation
 {
 	vtype n1=v(ez,n);
 	long double s1=s(n1,cmr);
@@ -340,7 +340,7 @@ bool rightside(const vtype& cmr,const vtype& cmcr,const vtype n)//determines whe
 	return s1*s2>=0;
 }
 
-bool planecontact(vtype rp,vtype n,long double R,const vtype& rpl,vtype npl,vtype& sp,vtype& sm)//finds contact of a point with a horizontal plane
+bool planecontact(vtype rp,vtype n,long double R,const vtype& rpl,vtype npl,vtype& sp,vtype& sm) // finds contact of a point with a horizontal plane
 {
 	vtype tr1=rpl;
 
@@ -389,7 +389,7 @@ bool planecontact(vtype rp,vtype n,long double R,const vtype& rpl,vtype npl,vtyp
 
 /********** Grid operations ***********/
 
-void findindex(const vtype& r,long double R,int& ixl,int& ixr,int& iyl,int& iyr,int& izu)//find adjecent grid indexes upper and lower bound
+void findindex(const vtype& r,long double R,int& ixl,int& ixr,int& iyl,int& iyr,int& izu) // find adjecent grid indexes upper and lower bound
 {
 	ixl=floor((r.x()-R-Rmax-xo)/dx);
 	ixr=floor((r.x()+R+Rmax-xo)/dx);
@@ -401,7 +401,7 @@ void findindex(const vtype& r,long double R,int& ixl,int& ixr,int& iyl,int& iyr,
 
 /********** Speedup functions ***********/
 
-long double distance_from_axis(const vtype& rc,const vtype& rp,const vtype& cm)//finds distance of point rc from the axis when motion is accoring to rule from Fig 2b of the paper.
+long double distance_from_axis(const vtype& rc,const vtype& rp,const vtype& cm) // finds distance of point rc from the axis when motion is accoring to rule from Fig 2b of the paper.
 {
 	vtype rcr=rc-rp;
 	vtype cmr=cm-rp;
@@ -411,7 +411,7 @@ long double distance_from_axis(const vtype& rc,const vtype& rp,const vtype& cm)/
 }
 
 
-void findpoints(const vtype& rp,const vtype& cm,const vtype& rc,long double d,vector<vtype>& points)//finds testing positons for search collision, movement on one contact
+void findpoints(const vtype& rp,const vtype& cm,const vtype& rc,long double d,vector<vtype>& points) // finds testing positons for search collision, movement on one contact
 {
 	points.erase(points.begin(),points.end());
 	vtype cmr=cm-rp;
@@ -436,14 +436,14 @@ void findpoints(const vtype& rp,const vtype& cm,const vtype& rc,long double d,ve
 	}
 }
 
-vtype rotpoint(const vtype& r,const vtype& rp,const vtype& cm,long double phi)//rotates point around axis defined by rp and cm (Fig 2b of the papaer)
+vtype rotpoint(const vtype& r,const vtype& rp,const vtype& cm,long double phi) // rotates point around axis defined by rp and cm (Fig 2b of the papaer)
 {
 	vtype n=v(ez,cm-rp);n=(1/norm(n))*n;
 	return rot(r,rp,cos(phi),sin(phi),n);
 }
 
 
-long double distance_from_axis2(const vtype& rc,const vtype& rp,const vtype& rp2)//finds distance of point rc from the axis when motion is accoring to rule from Fig 2c of the paper.
+long double distance_from_axis2(const vtype& rc,const vtype& rp,const vtype& rp2) // finds distance of point rc from the axis when motion is accoring to rule from Fig 2c of the paper.
 {
 	vtype rcr=rc-rp;
 	vtype n=rp2-rp;n=(1/norm(n))*n;
@@ -452,7 +452,7 @@ long double distance_from_axis2(const vtype& rc,const vtype& rp,const vtype& rp2
 }
 
 
-void findpoints2(const vtype& rp,const vtype& rp2,const vtype& cm,const vtype& rc,long double d,vector<vtype>& points)//finds testing positons for search collision, movement on two contact
+void findpoints2(const vtype& rp,const vtype& rp2,const vtype& cm,const vtype& rc,long double d,vector<vtype>& points) // finds testing positons for search collision, movement on two contact
 {
 	points.erase(points.begin(),points.end());
 	vtype cmr=cm-rp;
@@ -478,7 +478,7 @@ void findpoints2(const vtype& rp,const vtype& rp2,const vtype& cm,const vtype& r
 	}
 }
 
-vtype rotpoint2(const vtype& r,const vtype& rp,const vtype& rp2,const vtype& cm,long double phi)//rotates point around axis defined by rp and cm (Fig 2c of the papaer)
+vtype rotpoint2(const vtype& r,const vtype& rp,const vtype& rp2,const vtype& cm,long double phi) // rotates point around axis defined by rp and cm (Fig 2c of the papaer)
 {
 	vtype n=rp2-rp;n=(1/norm(n))*n;
 	if(s(ez,v(n,cm-rp))>0) n=-1*n;

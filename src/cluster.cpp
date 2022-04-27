@@ -34,11 +34,11 @@ void clustertype::init_sphere()
 	tp=-1;td=-1;
 	f=0;
 
-	//addition of a sphere
+	// addition of a sphere
 	r.clear();R.clear();
-	vtype v(0,0,h0);
+	vtype v(0,0,h0); //FIXME: Rename this, as v() is already a function in functions1.cpp. Not a severe problem, as the v() function is not used here and the v variable here is local, just to avoid future confusions. Or even better, we could give the v() function a more intuitive name, e.g. cross()
 	r.push_back(v);R.push_back(30.);
-	//end of sphere addition
+	// end of sphere addition
 
 	cm=cmass();
 }
@@ -90,34 +90,34 @@ void clustertype::init_cube_mshuffle(int nsph_per_side)
 	long double le=2*30.*(nsph_per_side-1);
 	long double D=2*30.;
 
-	//xy plane
+	// xy plane
 	for(int i=0;i<nsph_per_side;i++)
 	for(int j=0;j<nsph_per_side;j++)
 	{vtype v=D*(i*ex+j*ey);v.z()=v.z()+h0;vtype dv(eps_sh*ranfs(),eps_sh*ranfs(),eps_sh*ranfs());r.push_back(v+dv);R.push_back(Rp-eps_sh*ranf());}
 
-	//xy plane shifted
+	// xy plane shifted
 	for(int i=0;i<nsph_per_side;i++)
 	for(int j=0;j<nsph_per_side;j++)
 	{vtype v=D*(i*ex+j*ey);v.z()=v.z()+h0;v.z()=v.z()+(nsph_per_side-1)*D;vtype dv(eps_sh*ranfs(),eps_sh*ranfs(),eps_sh*ranfs());r.push_back(v+dv);R.push_back(Rp-eps_sh*ranf());}
 
 
-	//xz plane
+	// xz plane
 	for(int i=0;i<nsph_per_side;i++)
 	for(int j=1;j<nsph_per_side-1;j++)
 	{vtype v=D*(i*ex+j*ez);v.z()=v.z()+h0;vtype dv(eps_sh*ranfs(),eps_sh*ranfs(),eps_sh*ranfs());r.push_back(v+dv);R.push_back(Rp-eps_sh*ranf());}
 
-	//xz plane shifted
+	// xz plane shifted
 	for(int i=0;i<nsph_per_side;i++)
 	for(int j=1;j<nsph_per_side-1;j++)
 	{vtype v=D*(i*ex+j*ez);v.z()=v.z()+h0;v.y()=v.y()+(nsph_per_side-1)*D;vtype dv(eps_sh*ranfs(),eps_sh*ranfs(),eps_sh*ranfs());r.push_back(v+dv);R.push_back(Rp-eps_sh*ranf());}
 
 
-	//yz plane
+	// yz plane
 	for(int i=1;i<nsph_per_side-1;i++)
 	for(int j=1;j<nsph_per_side-1;j++)
 	{vtype v=D*(i*ey+j*ez);v.z()=v.z()+h0;vtype dv(eps_sh*ranfs(),eps_sh*ranfs(),eps_sh*ranfs());r.push_back(v+dv);R.push_back(Rp-eps_sh*ranf());}
 
-	//yz plane shifted
+	// yz plane shifted
 	for(int i=1;i<nsph_per_side-1;i++)
 	for(int j=1;j<nsph_per_side-1;j++)
 	{vtype v=D*(i*ey+j*ez);v.z()=v.z()+h0;v.x()=v.x()+(nsph_per_side-1)*D;vtype dv(eps_sh*ranfs(),eps_sh*ranfs(),eps_sh*ranfs());r.push_back(v+dv);R.push_back(Rp-eps_sh*ranf());}
@@ -133,7 +133,7 @@ void clustertype::init_cube_mshuffle(int nsph_per_side)
 	cm=cmass();
 }
 
-bool clustertype::settle(surroundtype& su)//sediments a particle
+bool clustertype::settle(surroundtype& su) // sediments a particle
 {
 	bool collapsed=false;
 	int countev=1;
@@ -147,38 +147,38 @@ bool clustertype::settle(surroundtype& su)//sediments a particle
 		countev++;
 		vtype cmp=cm;
 
-		switch(contacts)//propagates cluster by one event
+		switch(contacts) // propagates cluster by one event
 		{
-			case 0: fall(su);break;//propagate when cluster is falling
-			case 1: rotate1(su);break;//propagate when cluster is rotating on one contact
-			case 2: rotate2(su);break;//propagate when cluster is rotating on two contacts
+			case 0: fall(su);break; // propagate when cluster is falling
+			case 1: rotate1(su);break; // propagate when cluster is rotating on one contact
+			case 2: rotate2(su);break; // propagate when cluster is rotating on two contacts
 		}
 
 		long double dcm1=norm(cm-cmp);
 
 		long double eps_collapse=60*1e-10;
 		long double eps_contact=60*1e-8;
-		if(dcm1<eps_collapse&&particle!=0)//for spheres no need to detect collapse 
+		if(dcm1<eps_collapse&&particle!=0) // for spheres no need to detect collapse 
 		{
-			//collapse detected, going through collapse
+			// collapse detected, going through collapse
 
 			vector<vtype> rps;
 			vector<vtype> rds;
 			vector<int> p;
 			vector<int> d;
-			find_cluster_contacts(eps_contact,*this,su,rps,rds,p,d);//finds contacts by proximity
+			find_cluster_contacts(eps_contact,*this,su,rps,rds,p,d); // finds contacts by proximity
 
-			//check if there are contacts where one cluster particle touches two fixed particles (duplicate)
+			// check if there are contacts where one cluster particle touches two fixed particles (duplicate)
 			bool duplicate_exists=false;
 			for(int i=0;i<p.size()-1;i++)
 			for(int j=i+1;j<p.size();j++)
 			if(p[i]==p[j]) duplicate_exists=true;
 
-			if(!duplicate_exists)//if there are no duplicates find steepest descent trajectory
+			if(!duplicate_exists) // if there are no duplicates find steepest descent trajectory
 			{
 				rotattempt att;
-				find_steppest_descent(rps,rds,p,d,cm,att);//find steepest descent with closed contacts considered
-				//update state
+				find_steppest_descent(rps,rds,p,d,cm,att); // find steepest descent with closed contacts considered
+				// update state
 				contacts=att.contacts;
 				stable=att.stable;
 				p1=att.p1;
@@ -190,18 +190,18 @@ bool clustertype::settle(surroundtype& su)//sediments a particle
 				td=att.td;
 				tp=att.tp;
 				f=att.f;
-				//particle stays where it is so no need to change cm and r[i]
+				// particle stays where it is so no need to change cm and r[i]
 			}
 			else
 			{
-				//long double contact exists, cannot proceed
+				// long double contact exists, cannot proceed
 				stable=true;
-				collapsed=true;//considered as collapsed, in order to be redropped, if chosen
+				collapsed=true; // considered as collapsed, in order to be redropped, if chosen
 			}
 
 		}
 
-		if(countev%1000000==0)//parabolic collapse fixing
+		if(countev%1000000==0) // parabolic collapse fixing
 		{
 			if(norm(cmev-cm)<60) 
 			{
@@ -218,7 +218,7 @@ bool clustertype::settle(surroundtype& su)//sediments a particle
 	return collapsed;
 }
 
-void clustertype::periodic(long double lx,long double ly)//shifts cluster back to the periodic cell
+void clustertype::periodic(long double lx,long double ly) // shifts cluster back to the periodic cell
 {
 	vtype v;
 	v.z()=0;
@@ -234,7 +234,7 @@ void clustertype::periodic(long double lx,long double ly)//shifts cluster back t
 	movecluster(v);
 }
 
-void clustertype::movecluster(const vtype& v)//moves the whole cluster by vector v
+void clustertype::movecluster(const vtype& v) // moves the whole cluster by vector v
 {
 	for(int i=0;i<r.size();i++) r[i]=r[i]+v;
 	cm=cm+v;
@@ -245,25 +245,25 @@ void clustertype::fall(surroundtype& su)
 {
 	vector<fallattempt> atvec;fallattempt att;
 
-	bfall(su,atvec);//add events for collisions with fixed spheres
-	gfall(atvec);//add events for collisions with the ground
+	bfall(su,atvec); // add events for collisions with fixed spheres
+	gfall(atvec); // add events for collisions with the ground
 
 	if(atvec.size()==0) {ds("Error: fall: no events");exit(1);}//must be at least one future event
-	att=*max_element(atvec.begin(),atvec.end());//choose the highest future event
+	att=*max_element(atvec.begin(),atvec.end()); // choose the highest future event
 
-	step0(att,su);//move the cluster
+	step0(att,su); // move the cluster
 }
 
-void clustertype::bfall(surroundtype& su,vector<fallattempt>& atvec)//possible collisons with fixed sphere
+void clustertype::bfall(surroundtype& su,vector<fallattempt>& atvec) // possible collisons with fixed sphere
 {
 	int j,k;long double dlt;fallattempt att;
 	bool contact;long double zfc;
 	vtype rp;
-	for(k=0;k<r.size();k++)//looop through all cluster particles
+	for(k=0;k<r.size();k++) // loop through all cluster particles
 	{
 		zfc=h0;contact=false;
 		int ixl,ixr,iyl,iyr,izu,izd;findindex(r[k],R[k],ixl,ixr,iyl,iyr,izu);
-		for(int it=ixl;it<=ixr;it++)//loop through boxes containing candidates
+		for(int it=ixl;it<=ixr;it++) // loop through boxes containing candidates
 		for(int nt=iyl;nt<=iyr;nt++)
 		{
 			int i=imod(it,nx);
@@ -273,9 +273,9 @@ void clustertype::bfall(surroundtype& su,vector<fallattempt>& atvec)//possible c
 			{
 				j=su.box[i][n][m][s];
 				rp=vmod(su.r[j],cm,lx,ly);
-				if(k!=td||j!=tp)//to avoid recontact when conacts was lost by rolling to horizontal
-				if(pcontact0(r[k],R[k],rp,su.R[j],dlt)) //test for collision by translation 
-				if(r[k].z()-dlt>rp.z())//gradient check
+				if(k!=td||j!=tp) // to avoid recontact when conacts was lost by rolling to horizontal
+				if(pcontact0(r[k],R[k],rp,su.R[j],dlt)) // test for collision by translation 
+				if(r[k].z()-dlt>rp.z()) // gradient check
 				{
 					if(dlt>0&&!contact) {contact=true;zfc=r[k].z()-dlt;}
 					if(dlt>0&&r[k].z()-dlt>zfc) zfc=r[k].z()-dlt;
@@ -300,7 +300,7 @@ void clustertype::bfall(surroundtype& su,vector<fallattempt>& atvec)//possible c
 	}
 }
 
-void clustertype::gfall(vector<fallattempt>& atvec)//finds events for collision with the ground
+void clustertype::gfall(vector<fallattempt>& atvec) // finds events for collision with the ground
 {
 	int k;long double dlt;fallattempt att;
 	for(k=0;k<r.size();k++) 
@@ -323,7 +323,7 @@ void clustertype::gfall(vector<fallattempt>& atvec)//finds events for collision 
 	}
 }
 
-void clustertype::step0(fallattempt att,surroundtype& su)//updates the clusters state
+void clustertype::step0(fallattempt att,surroundtype& su) // updates the clusters state
 {
 	d1=att.d1;
 	p1=att.p1;
@@ -339,7 +339,7 @@ void clustertype::step0(fallattempt att,surroundtype& su)//updates the clusters 
 	translate(cm.z()-att.cm.z(),d1,p1,su);
 }
 
-void clustertype::translate(long double dlt,int d1,int p1,surroundtype& su)//translates the cluster
+void clustertype::translate(long double dlt,int d1,int p1,surroundtype& su) // translates the cluster
 {
 	int i;
 	for(i=0;i<r.size();i++) 
@@ -350,7 +350,7 @@ void clustertype::translate(long double dlt,int d1,int p1,surroundtype& su)//tra
 
 	if(p1>=0&&d1>=0)
 	{
-		//correction due to loss of precision due to use of dlt
+		// correction due to loss of precision due to use of dlt
 		vtype rp1=su.r[p1];
 		vtype rd1l=vmod(r[d1],rp1,lx,ly);
 
@@ -366,16 +366,16 @@ void clustertype::translate(long double dlt,int d1,int p1,surroundtype& su)//tra
 	}
 }
 
-void clustertype::rotate1(surroundtype& su)//moves the cluster by one event when cluster moves on one particle, structure is analogous to function fall
+void clustertype::rotate1(surroundtype& su) // moves the cluster by one event when cluster moves on one particle, structure is analogous to function fall
 {
 	vector<rotattempt> atvec;rotattempt att;
 	vtype rp_temp=vmod(su.r[p1],cm,lx,ly);
 
-	//correction of the case where the center of mass is above the center of fixed particle
+	// correction of the case where the center of mass is above the center of fixed particle
 	bool cm_on_top_of_fixed_particle=fabs(cm.x()-rp_temp.x())<60*1e-6&&fabs(cm.y()-rp_temp.y())<60*1e-6;
 	vtype sh;
 
-	if(cm_on_top_of_fixed_particle)//moves p1 particle slightly
+	if(cm_on_top_of_fixed_particle) // moves p1 particle slightly
 	{	
 		sh.z()=0;
 		do 
@@ -391,34 +391,34 @@ void clustertype::rotate1(surroundtype& su)//moves the cluster by one event when
 
 	vtype rp=vmod(su.r[p1],cm,lx,ly);
 
-	steeperdphi(rp,atvec);//dphi event
-	brot1(su,atvec);//add events for collisions with fixed spheres
-	hrot(rp,atvec);//add event for rotation to horizontal 
-	bottomrot1(rp,atvec);//add event for rotation to hanging
-	grot1(rp,atvec);//add event for contact with the ground
+	steeperdphi(rp,atvec); // dphi event
+	brot1(su,atvec); // add events for collisions with fixed spheres
+	hrot(rp,atvec); // add event for rotation to horizontal 
+	bottomrot1(rp,atvec); // add event for rotation to hanging
+	grot1(rp,atvec); // add event for contact with the ground
 	if(atvec.size()==0) {ds("Error: rotate1: no events");exit(1);}
 
 	att=*max_element(atvec.begin(),atvec.end());
-	step1(att,rp);//moves cluster
+	step1(att,rp); // moves cluster
 
 	if(cm_on_top_of_fixed_particle) su.r[p1old]=su.r[p1old]-sh;
 }
 
-void clustertype::steeperdphi(const vtype& rp,vector<rotattempt>& atvec)//deals with "frustrated" situation when cluster has one contact
+void clustertype::steeperdphi(const vtype& rp,vector<rotattempt>& atvec) // deals with "frustrated" situation when cluster has one contact
 {
-	if(r[d1].z()<rp.z())//if cluster particle is below fixed one then cluster is frustrated situation
+	if(r[d1].z()<rp.z()) // if cluster particle is below fixed one then cluster is frustrated situation
 	{		
 		rotinftype rotinf=rotinfphi;
 		vtype cmr=cm-rp;
 		vtype n=v(ez,cmr);n=(1/norm(n))*n;
 		rotinf.n=n;
 		
-		vtype cmc=rot(cm,rp,rotinf.cc,rotinf.ss,rotinf.n);//rotated center of mass
-		vtype rdr=rot(r[d1],rp,rotinf.cc,rotinf.ss,rotinf.n);//rotated cluster particle d1
+		vtype cmc=rot(cm,rp,rotinf.cc,rotinf.ss,rotinf.n); // rotated center of mass
+		vtype rdr=rot(r[d1],rp,rotinf.cc,rotinf.ss,rotinf.n); // rotated cluster particle d1
 
-		if(rightside(cm-rp,cmc-rp,rotinf.n))//checks whether the cluster is on the same side of the plane with normal ez x n, please see paper
+		if(rightside(cm-rp,cmc-rp,rotinf.n)) // checks whether the cluster is on the same side of the plane with normal ez x n, please see paper
 		{
-			if(rdr.z()<rp.z())//check whether after rotation by dphi angle cluster sphere is still below fixed sphere
+			if(rdr.z()<rp.z()) // check whether after rotation by dphi angle cluster sphere is still below fixed sphere
 			{
 				rotattempt att;
 				att.contacts=0;
@@ -442,7 +442,7 @@ void clustertype::steeperdphi(const vtype& rp,vector<rotattempt>& atvec)//deals 
 }
 
 
-void clustertype::brot1(surroundtype& su,vector<rotattempt>& atvec)//search for collision with fixed spheres while rotating
+void clustertype::brot1(surroundtype& su,vector<rotattempt>& atvec) // search for collision with fixed spheres while rotating
 {
 	rotattempt att;
 	gradrotattempt gatt;
@@ -452,7 +452,7 @@ void clustertype::brot1(surroundtype& su,vector<rotattempt>& atvec)//search for 
 //find
 	long double rmax=0;
 	long double lmax=0;
-	for(int k=0;k<r.size();k++)//find the rotation angle between test positions of the cluster such that no events are missed
+	for(int k=0;k<r.size();k++) // find the rotation angle between test positions of the cluster such that no events are missed
 	{
 		long double rt=distance_from_axis(r[k],rp,cm);
 		if(rt>rmax) 
@@ -464,23 +464,23 @@ void clustertype::brot1(surroundtype& su,vector<rotattempt>& atvec)//search for 
 	long double dephi;
 
 	if(rmax<lmax) dephi=l_pi/3.;
-	else dephi=2*asin(lmax/(2*rmax));//angle increment
+	else dephi=2*asin(lmax/(2*rmax)); // angle increment
 
 	long double phic=0;
 	long double phidet=l_pi;
 	do//do while loop until first contact has been detected without doubt
 	{
-		for(int k=0;k<r.size();k++)//loop through cluster particles
+		for(int k=0;k<r.size();k++) // loop through cluster particles
 		{
-			vtype point=rotpoint(r[k],rp,cm,phic);//position of the cluster particle according to current test angle
+			vtype point=rotpoint(r[k],rp,cm,phic); // position of the cluster particle according to current test angle
 			long double axisr=distance_from_axis(r[k],rp,cm);
 			long double l=2*axisr*sin(dephi/2);
 			long double max_cillinder=R[k]+Rmax+axisr-sqrt(axisr*axisr-l*l/4.);
-			long double radius=sqrt(l*l/4.+max_cillinder*max_cillinder);//radius of the search volume
+			long double radius=sqrt(l*l/4.+max_cillinder*max_cillinder); // radius of the search volume
 
-			vtype rref=point;//center of spheres giving the neighbours
+			vtype rref=point; // center of spheres giving the neighbours
 
-			//testing collision with candidate spheres 
+			// testing collision with candidate spheres 
 			int ixl=floor((rref.x()-radius-xo)/dx);
 			int ixu=floor((rref.x()+radius-xo)/dx);
 
@@ -500,27 +500,27 @@ void clustertype::brot1(surroundtype& su,vector<rotattempt>& atvec)//search for 
 
 				for(int jj=0;jj<su.box[ixn][iyn][izn].size();jj++)
 				{
-					j=su.box[ixn][iyn][izn][jj];//index of the candidate sphere
-					vtype rp2=vmod(su.r[j],cm,lx,ly);//periodic conditions applied to candidate sphere
+					j=su.box[ixn][iyn][izn][jj]; // index of the candidate sphere
+					vtype rp2=vmod(su.r[j],cm,lx,ly); // periodic conditions applied to candidate sphere
 					{
-						rotinftype rotinf1,rotinf2,rotinf;//information about rotation
-						if(j!=p1)//no need to test for contact 1
-						if(!f||k!=td||j!=tp)//to avoid reconctact after grazing loss of contact
-						if(pcontact1(rp,cm,r[k],R[k],rp2,su.R[j],rotinf1,rotinf2))//test for collision
+						rotinftype rotinf1,rotinf2,rotinf; // information about rotation
+						if(j!=p1) // no need to test for contact 1
+						if(!f||k!=td||j!=tp) // to avoid reconctact after grazing loss of contact
+						if(pcontact1(rp,cm,r[k],R[k],rp2,su.R[j],rotinf1,rotinf2)) // test for collision
 						{
 							vector<rotinftype> rotv;
 							rotv.erase(rotv.begin(),rotv.end());
 							rotv.push_back(rotinf1);rotv.push_back(rotinf2);
 
-							for(int ir=0;ir<2;ir++)//consider both solutions for collision
+							for(int ir=0;ir<2;ir++) // consider both solutions for collision
 							{
 								rotinf=rotv[ir];
 
-								//rotated relevant quantities
+								// rotated relevant quantities
 								vtype cmc=rot(cm,rp,rotinf.cc,rotinf.ss,rotinf.n);
 								vtype rdc=rot(r[d1],rp,rotinf.cc,rotinf.ss,rotinf.n);
 								vtype rcc=rot(r[k],rp,rotinf.cc,rotinf.ss,rotinf.n);
-								if(rightside(cm-rp,cmc-rp,rotinf.n)&&g(rp,cmc,rcc,rp2)<0&&cmc.z()<cm.z()+epsz)//final check if collision is a valid future event
+								if(rightside(cm-rp,cmc-rp,rotinf.n)&&g(rp,cmc,rcc,rp2)<0&&cmc.z()<cm.z()+epsz) // final check if collision is a valid future event
 								{
 									vector<vtype> rps;
 									rps.push_back(rp);rps.push_back(rp2);
@@ -530,15 +530,15 @@ void clustertype::brot1(surroundtype& su,vector<rotattempt>& atvec)//search for 
 									p.push_back(p1);p.push_back(j);
 									vector<int> d;
 									d.push_back(d1);d.push_back(k);
-									find_steppest_descent(rps,rds,p,d,cmc,att);//consider all contacts and find steepest descent trajectory
+									find_steppest_descent(rps,rds,p,d,cmc,att); // consider all contacts and find steepest descent trajectory
 									att.rotinf=rotinf; 
-									atvec.push_back(att);//add event
+									atvec.push_back(att); // add event
 
-									//if by numerical error |cos|>1
+									// if by numerical error |cos|>1
 									if(att.rotinf.cc<-1) att.rotinf.cc=att.rotinf.cc+1e-12;
 									if(att.rotinf.cc>1) att.rotinf.cc=att.rotinf.cc-1e-12;
-									long double phidetc=acos(att.rotinf.cc);//rotation angle for the current collision
-									if(phidetc<phidet) phidet=phidetc;//update smallest colision angle
+									long double phidetc=acos(att.rotinf.cc); // rotation angle for the current collision
+									if(phidetc<phidet) phidet=phidetc; // update smallest colision angle
 								}//right side if
 							}//+- solution for loop
 						}
@@ -546,12 +546,12 @@ void clustertype::brot1(surroundtype& su,vector<rotattempt>& atvec)//search for 
 				}
 			}		
 		}
-		phic+=dephi;//increase the angle for the cluster test position
+		phic+=dephi; // increase the angle for the cluster test position
 	}
-	while((phic-dephi)<phidet);//checks whether the current test angle is too large compared to current collision angle, for earlier collision to be possible  
+	while((phic-dephi)<phidet); // checks whether the current test angle is too large compared to current collision angle, for earlier collision to be possible  
 }
 
-void clustertype::hrot(const vtype& rp,vector<rotattempt>& atvec)//adds event for case in Fig 4b of the paper
+void clustertype::hrot(const vtype& rp,vector<rotattempt>& atvec) // adds event for case in Fig 4b of the paper
 {
 	rotattempt att;
 	rotinftype rotinf;
@@ -575,13 +575,13 @@ void clustertype::hrot(const vtype& rp,vector<rotattempt>& atvec)//adds event fo
 	if(rightside(cm-rp,cmc-rp,rotinf.n)&&att.cm.z()<cm.z()+epsz) atvec.push_back(att);
 }
 
-void clustertype::grot1(const vtype& rp,vector<rotattempt>& atvec)//contact with the ground
+void clustertype::grot1(const vtype& rp,vector<rotattempt>& atvec) // contact with the ground
 {
 	rotattempt att;
 	rotinftype rotinf1,rotinf2;
 	for(int i=0;i<r.size();i++)
 	{
-		if(toground1(rp,cm,r[i],R[i],rotinf1,rotinf2))//finds position (if any) where cluster sphere i makes contact with the ground
+		if(toground1(rp,cm,r[i],R[i],rotinf1,rotinf2)) // finds position (if any) where cluster sphere i makes contact with the ground
 		{
 			vtype cmc1=rot(cm,rp,rotinf1.cc,rotinf1.ss,rotinf1.n);
 			vtype cmc2=rot(cm,rp,rotinf2.cc,rotinf2.ss,rotinf2.n);
@@ -624,11 +624,11 @@ void clustertype::grot1(const vtype& rp,vector<rotattempt>& atvec)//contact with
 	}
 }
 
-void clustertype::bottomrot1(const vtype& rp,vector<rotattempt>& atvec)//event where clusters center of mass is below the center of fixed particle
+void clustertype::bottomrot1(const vtype& rp,vector<rotattempt>& atvec) // event where clusters center of mass is below the center of fixed particle
 {
 	rotattempt att;
 	rotinftype rotinf;
-	tobelow1(cm,rp,rotinf);//finds amount of rotation such that the center of mass is below the fixed particle
+	tobelow1(cm,rp,rotinf); // finds amount of rotation such that the center of mass is below the fixed particle
 
 	att.contacts=30;
 	att.stable=true;
@@ -644,7 +644,7 @@ void clustertype::bottomrot1(const vtype& rp,vector<rotattempt>& atvec)//event w
 	assert(att.cm.z()<=cm.z()+epsz);
 }
 
-void clustertype::step1(const rotattempt& att,const vtype& rp)//updates the cluster state to the next state
+void clustertype::step1(const rotattempt& att,const vtype& rp) // updates the cluster state to the next state
 {
 	contacts=att.contacts;
 	stable=att.stable;
@@ -661,7 +661,7 @@ void clustertype::step1(const rotattempt& att,const vtype& rp)//updates the clus
 	for(int i=0;i<r.size();i++) r[i]=rot(r[i],rp,att.rotinf.cc,att.rotinf.ss,att.rotinf.n);
 }
 
-void clustertype::rotate2(surroundtype& su)//propagates cluster by one event when cluster has two contacts
+void clustertype::rotate2(surroundtype& su) // propagates cluster by one event when cluster has two contacts
 {
 	vector<rotattempt> atvec;rotattempt att;
 
@@ -683,39 +683,39 @@ void clustertype::rotate2(surroundtype& su)//propagates cluster by one event whe
 		}
 		while(fabs(sh_val)<0.5);	
 		sh=60*1e-9*sh_val*vcmn;
-		su.r[p1]=su.r[p1]+sh;//moves fixed particle by small amount when cm is exactly on top of rotation axis
+		su.r[p1]=su.r[p1]+sh; // moves fixed particle by small amount when cm is exactly on top of rotation axis
 	}
 	int p1old=p1;
 
 	vtype rp1=vmod(su.r[p1],cm,lx,ly);
 	vtype rp2=vmod(su.r[p2],cm,lx,ly);
-	brot2(su,atvec);//add events for collisions with fixed spheres
-	disconnect(rp1,rp2,atvec,su);//add events for the case Fig6a of the paper
-	steeperdphi2(rp1,rp2,atvec);//add event for "frustrated" situation
-	hrot2(rp1,rp2,atvec);//add events for the case Fig6b of the paper
-	bottomrot2(rp1,rp2,atvec);//add events for the case Fig6c of the paper
-	grot2(rp1,rp2,atvec);//add events for contact with the ground
+	brot2(su,atvec); // add events for collisions with fixed spheres
+	disconnect(rp1,rp2,atvec,su); // add events for the case Fig6a of the paper
+	steeperdphi2(rp1,rp2,atvec); // add event for "frustrated" situation
+	hrot2(rp1,rp2,atvec); // add events for the case Fig6b of the paper
+	bottomrot2(rp1,rp2,atvec); // add events for the case Fig6c of the paper
+	grot2(rp1,rp2,atvec); // add events for contact with the ground
 
 	if(atvec.size()==0) {ds("Error: rotate2: no events");exit(1);}
 
-	att=*max_element(atvec.begin(),atvec.end());//choose earliest event
-	step2(att,su,rp1);//propagate cluster by chosen event
+	att=*max_element(atvec.begin(),atvec.end()); // choose earliest event
+	step2(att,su,rp1); // propagate cluster by chosen event
 
 	if(is_middle) su.r[p1old]=su.r[p1old]-sh;
 }
 
-void clustertype::steeperdphi2(const vtype& rp1,const vtype& rp2,vector<rotattempt>& atvec)//adds event for frustrated situation (if any) with two contacts 
+void clustertype::steeperdphi2(const vtype& rp1,const vtype& rp2,vector<rotattempt>& atvec) // adds event for frustrated situation (if any) with two contacts 
 {
-	//it is guarantied that rp1 corresponds to p1 and rp2 to p2, see function rotate2()
+	// it is guarantied that rp1 corresponds to p1 and rp2 to p2, see function rotate2()
 	vector<vtype> rp;rp.push_back(rp1);rp.push_back(rp2);
 	vector<vtype> rd;rd.push_back(r[d1]);rd.push_back(r[d2]);
 	vector<int> p;p.push_back(p1);p.push_back(p2);
 	vector<int> d;d.push_back(d1);d.push_back(d2);
 
 	rotattempt att;
-	find_steppest_descent(rp,rd,p,d,cm,att);//find steepest descent trajectory
+	find_steppest_descent(rp,rd,p,d,cm,att); // find steepest descent trajectory
 
-	if(att.contacts<contacts)//is it possible to move with less contacts?
+	if(att.contacts<contacts) // is it possible to move with less contacts?
 	{
 		vtype cmr=cm-rp1;vtype n=rp2-rp1;n=(1/norm(n))*n;
 		if(s(ez,v(n,cm-rp1))>0) n=-1*n;
@@ -723,23 +723,23 @@ void clustertype::steeperdphi2(const vtype& rp1,const vtype& rp2,vector<rotattem
 		rotinftype rotinf=rotinfphi;
 		rotinf.n=n;
 
-		vtype cmc=rot(cm,rp1,rotinf.cc,rotinf.ss,rotinf.n);//rotate center of mass of the cluster by small angle
+		vtype cmc=rot(cm,rp1,rotinf.cc,rotinf.ss,rotinf.n); // rotate center of mass of the cluster by small angle
 
 		if(rightside(cm-rp1,cmc-rp1,rotinf.n))
 		{
-			//vectors rp and rd
+			// vectors rp and rd
 			vector<vtype> rp;rp.push_back(rp1);rp.push_back(rp2);
 
 			vtype rd1r=rot(r[d1],rp1,rotinf.cc,rotinf.ss,rotinf.n);
 			vtype rd2r=rot(r[d2],rp1,rotinf.cc,rotinf.ss,rotinf.n);
 			vector<vtype> rd;rd.push_back(rd1r);rd.push_back(rd2r);
 			
-			//indices of contacting particles
+			// indices of contacting particles
 			vector<int> p;p.push_back(p1);p.push_back(p2);
 			vector<int> d;d.push_back(d1);d.push_back(d2);
 
 			rotattempt att;
-			find_steppest_descent(rp,rd,p,d,cmc,att);//find steepest descent after the cluster has been rotated
+			find_steppest_descent(rp,rd,p,d,cmc,att); // find steepest descent after the cluster has been rotated
 			
 			if(att.contacts<contacts) 
 			{
@@ -747,7 +747,7 @@ void clustertype::steeperdphi2(const vtype& rp1,const vtype& rp2,vector<rotattem
 				atvec.push_back(att);
 				assert(att.cm.z()<=cm.z());
 			}
-			else //consistency check that rolling on two has the same contacts
+			else//consistency check that rolling on two has the same contacts
 			{
 				assert(att.stable==stable);
 				assert(att.contacts==contacts);
@@ -757,14 +757,14 @@ void clustertype::steeperdphi2(const vtype& rp1,const vtype& rp2,vector<rotattem
 	}
 	else
 	{
-		//check of consistency between search for steepest descent in previous and current step
+		// check of consistency between search for steepest descent in previous and current step
 		assert(att.stable==stable);
 		assert(att.contacts==contacts);
 		assert((att.p1==p1&&att.d1==d1)||(att.p2==p1&&att.d2==d1));
 	}
 }
 
-void clustertype::brot2(surroundtype& su,vector<rotattempt>& atvec)//find contacts with fixed spheres while move on two contacts
+void clustertype::brot2(surroundtype& su,vector<rotattempt>& atvec) // find contacts with fixed spheres while move on two contacts
 {
 	rotattempt att;
 	gradrotattempt gatt;
@@ -802,7 +802,7 @@ void clustertype::brot2(surroundtype& su,vector<rotattempt>& atvec)//find contac
 			long double max_cillinder=R[k]+Rmax+axisr-sqrt(axisr*axisr-l*l/4.);
 			long double radius=sqrt(l*l/4.+max_cillinder*max_cillinder);
 
-			vtype rref=point; //center of spheres giving the neighbours
+			vtype rref=point; // center of spheres giving the neighbours
 			int ixl=floor((rref.x()-radius-xo)/dx);
 			int ixu=floor((rref.x()+radius-xo)/dx);
 
@@ -871,13 +871,13 @@ void clustertype::brot2(surroundtype& su,vector<rotattempt>& atvec)//find contac
 	while((phic-dephi)<phidet);
 }
 
-void clustertype::bottomrot2(const vtype& rp1,const vtype& rp2,vector<rotattempt>& atvec)//add event where clusters center of mass is below the axis
+void clustertype::bottomrot2(const vtype& rp1,const vtype& rp2,vector<rotattempt>& atvec) // add event where clusters center of mass is below the axis
 {
 	rotattempt att;
 	rotinftype rotinf;
 	tobelow2(cm,rp1,rp2,rotinf);
 	vtype cmc=rot(cm,rp1,rotinf.cc,rotinf.ss,rotinf.n);
-	att.contacts=20;//cluster is stable so this value is irrelevant. Value 20 signals that cluster hangs
+	att.contacts=20; // cluster is stable so this value is irrelevant. Value 20 signals that cluster hangs
 	att.stable=true;
 	att.p1=p1;
 	att.d1=d1;
@@ -895,7 +895,7 @@ void clustertype::bottomrot2(const vtype& rp1,const vtype& rp2,vector<rotattempt
 	return;
 }
 
-void clustertype::grot2(const vtype rp1,const vtype rp2,vector<rotattempt>& atvec)//add event for contact with the ground while rolling on two contacts
+void clustertype::grot2(const vtype rp1,const vtype rp2,vector<rotattempt>& atvec) // add event for contact with the ground while rolling on two contacts
 {
 	rotattempt att;
 	rotinftype rotinf1,rotinf2;
@@ -1017,24 +1017,24 @@ void clustertype::hrot2(const vtype& rp1,const vtype& rp2,vector<rotattempt>& at
 	}
 }
 
-void clustertype::disconnect(const vtype& rp1,const vtype& rp2, vector<rotattempt>& atvec,surroundtype& su)//adds events for the grazing loss of contacts, see Fig 6a of the paper
+void clustertype::disconnect(const vtype& rp1,const vtype& rp2, vector<rotattempt>& atvec,surroundtype& su) // adds events for the grazing loss of contacts, see Fig 6a of the paper
 {
 	rotattempt att;
 	rotinftype rotinf1,rotinf2;
 	vtype rd1=r[d1];
 	vtype rd2=r[d2];
 
-	//treatment of contact 2 
-	bool push12=g(rp1,cm,rd2,rp2)<0;//is contact 2 closing while rolling just on contact 1?
-	if(push12&&pdisconnect(cm,rp1,rp2,rd1,rd2,rotinf1,rotinf2))//if so find position of the cluster where d2 moves tangentially to p2, while rotation is on p1 (see paper Eq. 25)
+	// treatment of contact 2 
+	bool push12=g(rp1,cm,rd2,rp2)<0; // is contact 2 closing while rolling just on contact 1?
+	if(push12&&pdisconnect(cm,rp1,rp2,rd1,rd2,rotinf1,rotinf2)) // if so find position of the cluster where d2 moves tangentially to p2, while rotation is on p1 (see paper Eq. 25)
 	{
-		//starting solution 1
+		// starting solution 1
 		vtype cmc1=rot(cm,rp1,rotinf1.cc,rotinf1.ss,rotinf1.n);
 		if(rightside(cm-rp1,cmc1-rp1,rotinf1.n))
 		{
-			if(positivecircle(rp1,rp2,rd2,rotinf1))//checking the condition (31) of the paper
+			if(positivecircle(rp1,rp2,rd2,rotinf1)) // checking the condition (31) of the paper
 			{
-				//condition (31) not satisfied. Standard treatment.
+				// condition (31) not satisfied. Standard treatment.
 				att.contacts=1;
 				att.stable=false;
 				att.p1=p1;
@@ -1052,7 +1052,7 @@ void clustertype::disconnect(const vtype& rp1,const vtype& rp2, vector<rotattemp
 			}
 			else
 			{
-				//condition (31) satisfied. Cluster needs to be rotated by dphi before contact can be lost
+				// condition (31) satisfied. Cluster needs to be rotated by dphi before contact can be lost
 				rotinfphi.n=rotinf1.n;
 				rotinftype rotinfdphi=rotn(rotinf1,rotinfphi);
 				vtype cmcdph=rot(cm,rp1,rotinfdphi.cc,rotinfdphi.ss,rotinfdphi.n);
@@ -1077,7 +1077,7 @@ void clustertype::disconnect(const vtype& rp1,const vtype& rp2, vector<rotattemp
 			}
 		}
 
-		//starting solution 2
+		// starting solution 2
 		vtype cmc2=rot(cm,rp1,rotinf2.cc,rotinf2.ss,rotinf2.n);
 		if(rightside(cm-rp1,cmc2-rp1,rotinf2.n))
 		{
@@ -1125,13 +1125,13 @@ void clustertype::disconnect(const vtype& rp1,const vtype& rp2, vector<rotattemp
 		}
 	}
 
-	//end of treatment of contact2
+	// end of treatment of contact2
 
-	//treatment of contact 1
+	// treatment of contact 1
 	bool push21=g(rp2,cm,rd1,rp1)<0;
 	if(push21&&pdisconnect(cm,rp2,rp1,rd2,rd1,rotinf1,rotinf2))
 	{
-		//solution 1
+		// solution 1
 		vtype cmc1=rot(cm,rp1,rotinf1.cc,rotinf1.ss,rotinf1.n);
 		if(rightside(cm-rp1,cmc1-rp1,rotinf1.n))
 		{
@@ -1178,7 +1178,7 @@ void clustertype::disconnect(const vtype& rp1,const vtype& rp2, vector<rotattemp
 			}
 		}
 
-		//solution 2
+		// solution 2
 		vtype cmc2=rot(cm,rp1,rotinf2.cc,rotinf2.ss,rotinf2.n);
 		vtype rd2c2=rot(rd2,rp1,rotinf2.cc,rotinf2.ss,rotinf2.n);
 		if(rightside(cm-rp1,cmc2-rp1,rotinf2.n))
@@ -1232,7 +1232,7 @@ void clustertype::disconnect(const vtype& rp1,const vtype& rp2, vector<rotattemp
 	}
 }
 
-bool clustertype::positivecircle(const vtype& rp1,const vtype& rp2,const vtype& rd2,const rotinftype& rotinf)//check condition (31) of the paper
+bool clustertype::positivecircle(const vtype& rp1,const vtype& rp2,const vtype& rd2,const rotinftype& rotinf) // check condition (31) of the paper
 {
 	vtype cmr=rot(cm,rp1,rotinf.cc,rotinf.ss,rotinf.n);
 	vtype rdr=rot(rd2,rp1,rotinf.cc,rotinf.ss,rotinf.n);
@@ -1248,7 +1248,7 @@ bool clustertype::positivecircle(const vtype& rp1,const vtype& rp2,const vtype& 
 }
 
 
-void clustertype::step2(const rotattempt& att,surroundtype& su,const vtype& rp)//update cluster state for rotation on two contacts
+void clustertype::step2(const rotattempt& att,surroundtype& su,const vtype& rp) // update cluster state for rotation on two contacts
 {
 	contacts=att.contacts;
 	stable=att.stable;
@@ -1266,7 +1266,7 @@ void clustertype::step2(const rotattempt& att,surroundtype& su,const vtype& rp)/
 }
 
 
-void clustertype::find_steppest_descent(vector<vtype> rp,vector<vtype> rd,vector<int> p,vector<int> d,const vtype& cmc,rotattempt& att)//find steepest descent trajectory of the center of mass while considering all contacts
+void clustertype::find_steppest_descent(vector<vtype> rp,vector<vtype> rd,vector<int> p,vector<int> d,const vtype& cmc,rotattempt& att) // find steepest descent trajectory of the center of mass while considering all contacts
 {
 	gradrotattempt gatt;
 	vector<gradrotattempt> gradevent;
@@ -1274,7 +1274,7 @@ void clustertype::find_steppest_descent(vector<vtype> rp,vector<vtype> rd,vector
 	assert(p.size()==d.size());
 	assert(rp.size()==p.size());
 	int contact_number=rp.size();
-	//Add event for cluster falling, if allowed
+	// Add event for cluster falling, if allowed
 	bool can_fall=true;
 	for(int i=0;i<contact_number;i++) {can_fall=can_fall&&rd[i].z()<rp[i].z();}
 	if(can_fall) 
@@ -1295,7 +1295,7 @@ void clustertype::find_steppest_descent(vector<vtype> rp,vector<vtype> rd,vector
 		gradevent.push_back(gatt);
 	}
 
-	//Add trajectories for rolling on one contact, if they exist 
+	// Add trajectories for rolling on one contact, if they exist 
 	for(int i=0;i<contact_number;i++)
 	{
 		bool can_rotate=true;
@@ -1324,7 +1324,7 @@ void clustertype::find_steppest_descent(vector<vtype> rp,vector<vtype> rd,vector
 
 	}
 
-	//Add trajectories for rolling on two contacts, if they exist
+	// Add trajectories for rolling on two contacts, if they exist
 	for(int i=1;i<contact_number;i++)
 	for(int j=0;j<i;j++)
 	{
@@ -1349,7 +1349,7 @@ void clustertype::find_steppest_descent(vector<vtype> rp,vector<vtype> rd,vector
 		}
 	}
 
-	if(!gradevent.empty())//if there are trajectories find the steepest
+	if(!gradevent.empty()) // if there are trajectories find the steepest
 	{
 		gatt=gradevent[0];
 		for(int ig=0;ig<gradevent.size();ig++)
@@ -1388,9 +1388,9 @@ void clustertype::find_steppest_descent(vector<vtype> rp,vector<vtype> rd,vector
 
 void clustertype::randrot()
 {
-	//random basis way
+	// random basis way
 
-	vtype nxp;//first vector
+	vtype nxp; // first vector
 	do
 	{
 		nxp.x()=ranfs();
@@ -1400,7 +1400,7 @@ void clustertype::randrot()
 	while(norm(nxp)>1||norm(nxp)<0.5);
 	nxp=(1/norm(nxp))*nxp;
 
-	vtype nyp;//second vector
+	vtype nyp; // second vector
 	do
 	{
 		nyp.x()=ranfs();
@@ -1409,10 +1409,10 @@ void clustertype::randrot()
 	}
 	while(norm(nyp)>1||norm(nyp)<0.5||fabs(s(nyp,nxp))<0.1);
 
-	nyp=nyp-nxp*s(nyp,nxp);//nyp is now normal to nxp
+	nyp=nyp-nxp*s(nyp,nxp); // nyp is now normal to nxp
 	nyp=(1/norm(nyp))*nyp;
 
-	vtype nzp=v(nxp,nyp);//nzp normal to both nxp and nyp
+	vtype nzp=v(nxp,nyp); // nzp normal to both nxp and nyp
 
 	for(int i=0;i<r.size();i++) 
 	{

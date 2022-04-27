@@ -5,7 +5,7 @@
 int imod(int i,int n)
 {
 	if(i>=0) return i%n;
-	else return (i%n+n)%n;//long double % needed to correct -10%10=-10.
+	else return (i%n+n)%n; // long double % needed to correct -10%10=-10.
 }
 
 long double rmod(long double x,long double l)

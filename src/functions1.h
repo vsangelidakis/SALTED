@@ -4,6 +4,7 @@
 #include "surround.h"
 #include "cluster.h"
 
+// see cpp file for descriptions of each function
 void initrand();
 void load_parameters(const char* inputfile);
 
