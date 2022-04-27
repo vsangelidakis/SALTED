@@ -8,7 +8,7 @@
 
 int main(int argc,char** argv)
 {	
-	initrand();//initalisation of random number generator (appart form seed)
+	initrand();//initialisation of random number generator (apart from seed)
 	load_parameters("input");//reads file with input parameters
 
 	feenableexcept(FE_DIVBYZERO | FE_INVALID | FE_OVERFLOW | FE_UNDERFLOW);//simulation exits if NaN etc occure
