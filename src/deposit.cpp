@@ -35,7 +35,7 @@ int main(int argc,char** argv)
 	vector<clustertype> co;
 	co.resize(N);
 
-	for(int i=0;i<N;i++) // filling up the vector containing clusters, represented with object cp. The particles from this vector will be deposited
+	for(int i=0; i<N; i++) // filling up the vector containing clusters, represented with object cp. The particles from this vector will be deposited
 	{
 		clustertype cp;
 		if(particle==0)	cp.init_sphere();
@@ -43,7 +43,7 @@ int main(int argc,char** argv)
 		if(particle==2)	cp.init_cube_mshuffle(nspheres);
 
 		long double ddx=lx/2+lx/2*ranfs(),ddy=ly/2+ly/2*ranfs();
-		for(int k=0;k<cp.r.size();k++) 
+		for(int k=0; k<cp.r.size(); k++) 
 		{
 			cp.r[k].x()+=ddx;
 			cp.r[k].y()+=ddy;
@@ -57,7 +57,7 @@ int main(int argc,char** argv)
 	surroundtype su;
 	su.init_grid(); // initializations of the object containing fixed particles
 
-	for(int i=0;i<co.size();i++) // loop in which particles are sedimented 
+	for(int i=0; i<co.size(); i++) // loop in which particles are sedimented 
 	{
 		if(i%100==0) ds("i",i);
 		clustertype c=co[i];
@@ -78,9 +78,9 @@ int main(int argc,char** argv)
 					long double ddx=-c.cm.x()+lx/2.+lx/2.*ranfs();
 					long double ddy=-c.cm.y()+ly/2.+ly/2.*ranfs();
 
-					for(int q=0;q<c.r.size();q++) 
+					for(int q=0; q<c.r.size(); q++) 
 					{
-						c.r[q].x()+=ddx;c.r[q].y()+=ddy;
+						c.r[q].x()+=ddx; c.r[q].y()+=ddy;
 					} 
 					c.cm=c.cmass();
 					c.randrot();	

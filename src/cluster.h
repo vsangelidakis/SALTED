@@ -41,7 +41,7 @@ class gradrotattempt : public rotattempt
 };
 
 
-class clustertype : public clusterbase//full cluster implementation
+class clustertype : public clusterbase // full cluster implementation
 {
 	public:
 		vector<vtype> r;

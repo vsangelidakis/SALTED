@@ -123,7 +123,7 @@ private:
 };
 
 const vtype null(0,0,0); //FIXME: Remove if unused
-const vtype ex(1,0,0);   //FIXME: Remove if unused
+const vtype ex(1,0,0);   //FIXME: Remove if unused // This is actually used in cluster.cpp
 const vtype ey(0,1,0);   //FIXME: Remove if unused
 const vtype ez(0,0,1);   //FIXME: Remove if unused
 #endif

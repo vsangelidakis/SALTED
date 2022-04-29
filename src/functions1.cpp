@@ -51,22 +51,22 @@ void load_parameters(const char* inputfile)
 // calculates the center of mass of the packing
 vtype cmass(const vector<vtype>& r, const vector<long double>& R)
 {
-	int i;long double mc=0,r3;vtype res=null;
-	for(i=0;i<r.size();i++)
+	int i; long double mc=0,r3; vtype res=null;
+	for(i=0; i<r.size(); i++)
 	{
 		r3=R[i]*R[i]*R[i];
 		res=res+r3*(r[i]-r[0]);
 		mc=mc+r3;
 	}
-	res=(1/mc)*res;res=res+r[0];
+	res=(1/mc)*res; res=res+r[0];
 	return res;
 }
 
 // calculates the mass of the packing assuming that sphere with radius 30 has unit mass
 long double mass(const vector<vtype>& r, const vector<long double>& R)
 {
-	int i;long double m=0;
-	for(i=0;i<r.size();i++)
+	int i; long double m=0;
+	for(i=0; i<r.size(); i++)
 	{
 		long double rr;
 		rr=R[i]/30.;
@@ -79,10 +79,10 @@ long double mass(const vector<vtype>& r, const vector<long double>& R)
 int checkinters(surroundtype& su) 
 {
 	int count=0;
-	for(int ix=0;ix<nx;ix++)
-	for(int iy=0;iy<ny;iy++)
-	for(int iz=0;iz<nz;iz++)
-	for(int ii=0;ii<su.box[ix][iy][iz].size();ii++)
+	for(int ix=0; ix<nx; ix++)
+	for(int iy=0; iy<ny; iy++)
+	for(int iz=0; iz<nz; iz++)
+	for(int ii=0; ii<su.box[ix][iy][iz].size(); ii++)
 	{
 		int i=su.box[ix][iy][iz][ii];
 		vtype r=su.r[i];
@@ -93,22 +93,22 @@ int checkinters(surroundtype& su)
 		int iyl=floor((r.y()-R-Rmax-yo)/dy);
 		int iyu=floor((r.y()+R+Rmax-yo)/dy);
 
-		int izl=floor((r.z()-R-Rmax-zo)/dz);if(izl<0) izl=0;
-		int izu=floor((r.z()+R+Rmax-zo)/dz);if(izu>=nz) izu=nz-1;
+		int izl=floor((r.z()-R-Rmax-zo)/dz); if(izl<0) izl=0;
+		int izu=floor((r.z()+R+Rmax-zo)/dz); if(izu>=nz) izu=nz-1;
 
-		for(int ixnt=ixl;ixnt<=ixu;ixnt++)
-		for(int iynt=iyl;iynt<=iyu;iynt++)
-		for(int iznt=izl;iznt<=izu;iznt++)
+		for(int ixnt=ixl; ixnt<=ixu; ixnt++)
+		for(int iynt=iyl; iynt<=iyu; iynt++)
+		for(int iznt=izl; iznt<=izu; iznt++)
 		{
 			int ixn=imod(ixnt,nx);
 			int iyn=imod(iynt,ny);
 			int izn=iznt; 
-			for(int jj=0;jj<su.box[ixn][iyn][izn].size();jj++)
+			for(int jj=0; jj<su.box[ixn][iyn][izn].size(); jj++)
 			{
 				int j=su.box[ixn][iyn][izn][jj];
 				vtype rj=vmod(su.r[j],r,lx,ly);
 				long double Rj=su.R[j];
-				if(i!=j) if(norm(r-rj)-R-Rj<-60*1e-8) {ds(i,j,norm(r-rj)-R-Rj);assert(0);count++;}
+				if(i!=j) if(norm(r-rj)-R-Rj<-60*1e-8) {ds(i,j,norm(r-rj)-R-Rj); assert(0); count++;}
 			}
 		}
 	}
@@ -119,7 +119,7 @@ int checkinters(surroundtype& su)
 // calculates the number of overlaps between the cluster spheres and the sediment
 bool checkinters(const clustertype& c,const surroundtype& s)
 {
-	for(int i=0;i<c.r.size();i++)
+	for(int i=0; i<c.r.size(); i++)
 	{
 		vtype rp=c.r[i];
 		long double R=c.R[i];
@@ -129,22 +129,22 @@ bool checkinters(const clustertype& c,const surroundtype& s)
 		int iyl=floor((rp.y()-(R+Rmax)-yo)/dy);
 		int iyu=floor((rp.y()+(R+Rmax)-yo)/dy);
 
-		int izl=floor((rp.z()-(R+Rmax)-zo)/dz);if(izl<0) izl=0;
-		int izu=floor((rp.z()+(R+Rmax)-zo)/dz);if(izu>=nz) izu=nz-1;
+		int izl=floor((rp.z()-(R+Rmax)-zo)/dz); if(izl<0) izl=0;
+		int izu=floor((rp.z()+(R+Rmax)-zo)/dz); if(izu>=nz) izu=nz-1;
 
-		for(int ixnt=ixl;ixnt<=ixu;ixnt++)
-		for(int iynt=iyl;iynt<=iyu;iynt++)
-		for(int iznt=izl;iznt<=izu;iznt++)
+		for(int ixnt=ixl; ixnt<=ixu; ixnt++)
+		for(int iynt=iyl; iynt<=iyu; iynt++)
+		for(int iznt=izl; iznt<=izu; iznt++)
 		{
 			int ixn=imod(ixnt,nx);
 			int iyn=imod(iynt,ny);
 			int izn=iznt; 
-			for(int jj=0;jj<s.box[ixn][iyn][izn].size();jj++)
+			for(int jj=0; jj<s.box[ixn][iyn][izn].size(); jj++)
 			{
 				int j=s.box[ixn][iyn][izn][jj];
 				{
 					vtype rj=vmod(s.r[j],rp,lx,ly);
-					if (norm(c.r[i]-rj)<c.R[i]+s.R[j]-60.*1e-6) {ds("Intersection: ",i,j,norm(c.r[i]-rj)-c.R[i]-s.R[j]);return true;}
+					if (norm(c.r[i]-rj)<c.R[i]+s.R[j]-60.*1e-6) {ds("Intersection: ",i,j,norm(c.r[i]-rj)-c.R[i]-s.R[j]); return true;}
 				}
 			}
 		}
@@ -156,7 +156,7 @@ bool checkinters(const clustertype& c,const surroundtype& s)
 // finds number of contacts that the cluster has with its surroundings
 void find_cluster_contacts(long double eps_contact,const clustertype& c,const surroundtype& su,vector<vtype>& rps,vector<vtype>& rds,vector<int>& p,vector<int>& d)
 {
-	for(int i=0;i<c.r.size();i++)
+	for(int i=0; i<c.r.size(); i++)
 	{
 		long double lcd=c.R[i]+Rmax;
 		vtype r=c.r[i];
@@ -166,17 +166,17 @@ void find_cluster_contacts(long double eps_contact,const clustertype& c,const su
 		int iyl=floor((r.y()-lcd-yo)/dy);
 		int iyu=floor((r.y()+lcd-yo)/dy);
 
-		int izl=floor((r.z()-lcd-zo)/dz);if(izl<0) izl=0;
-		int izu=floor((r.z()+lcd-zo)/dz);if(izu>=nz) izu=nz-1;
+		int izl=floor((r.z()-lcd-zo)/dz); if(izl<0) izl=0;
+		int izu=floor((r.z()+lcd-zo)/dz); if(izu>=nz) izu=nz-1;
 
-		for(int ixnt=ixl;ixnt<=ixu;ixnt++)
-		for(int iynt=iyl;iynt<=iyu;iynt++)
-		for(int iznt=izl;iznt<=izu;iznt++)
+		for(int ixnt=ixl; ixnt<=ixu; ixnt++)
+		for(int iynt=iyl; iynt<=iyu; iynt++)
+		for(int iznt=izl; iznt<=izu; iznt++)
 		{
 			int ixn=imod(ixnt,nx);
 			int iyn=imod(iynt,ny);
 			int izn=iznt; 
-			for(int jj=0;jj<su.box[ixn][iyn][izn].size();jj++)
+			for(int jj=0; jj<su.box[ixn][iyn][izn].size(); jj++)
 			{
 				int j=su.box[ixn][iyn][izn][jj];
 				{
@@ -200,7 +200,7 @@ void unload(clustertype& c,surroundtype& su)
 {
 	vtype v;
 	int susize=su.r.size();
-	for(int i=0;i<c.r.size();i++) 
+	for(int i=0; i<c.r.size(); i++) 
 	{
 		int ii=susize+i;
 		unloadsphere(vmod(c.r[i],lx,ly),ii,c.R[i],su);
@@ -222,36 +222,36 @@ void unloadsphere(const vtype& v,int ii,long double R,surroundtype& su)
 	if(iz>su.izmax[ix][iy]) su.izmax[ix][iy]=iz;
 }
 
-//outputs the fixed particles to a file
+// outputs the fixed particles to a file
 void output(surroundtype& su,string fname) 
 {
-	int i;ofstream myfile;
+	int i; ofstream myfile;
 	myfile.open (fname.c_str());
 	myfile.precision(15);
-	for(i=0;i<su.r.size();i++) {myfile<<su.r[i].x()<<" "<<su.r[i].y()<<" "<<su.r[i].z()<<" "<<su.R[i]<<endl;}
+	for(i=0; i<su.r.size(); i++) {myfile<<su.r[i].x()<<" "<<su.r[i].y()<<" "<<su.r[i].z()<<" "<<su.R[i]<<endl;}
 	myfile.close();
 }
 
 
-//outputs a set of clusters to a single file
+// outputs a set of clusters to a single file
 void output(vector<clustertype>& cd,string fname)
 {
-	int i;ofstream myfile;
+	int i; ofstream myfile;
 	myfile.open(fname.c_str());
 	myfile.precision(15);
 
-	for(i=0;i<cd.size();i++) 
-	for(int j=0;j<cd[i].r.size();j++) 
+	for(i=0; i<cd.size(); i++) 
+	for(int j=0; j<cd[i].r.size(); j++) 
 	myfile<<cd[i].r[j].x()<<" "<<cd[i].r[j].y()<<" "<<cd[i].r[j].z()<<" "<<cd[i].R[j]<<endl;
 
 	//cm
-	//for(i=0;i<cd.size();i++) 
+	//for(i=0; i<cd.size(); i++) 
 	//myfile<<cd[i].cm<<endl;
 
 	myfile.close();
 }
 
-//outputs to a file the number of clusters sedimented (input varibale size) and the number of intersections in the sediment (also input parameter)
+// outputs to a file the number of clusters sedimented (input variable size) and the number of intersections in the sediment (also input parameter)
 void writedetails(int size,int intersect,string name)
 {
 	ofstream myfile;
@@ -262,7 +262,7 @@ void writedetails(int size,int intersect,string name)
 }
 
 
-//outputs to a file the filling hegiht of the sediment
+// outputs to a file the filling height of the sediment
 void write2cm(long double z,string name)
 {
 	ofstream myfile;

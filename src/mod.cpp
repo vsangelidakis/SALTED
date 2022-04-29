@@ -9,13 +9,13 @@ int imod(int i,int n)
 }
 
 long double rmod(long double x,long double l)
-{
+{ // COMMENT used only in functions of this file - not used elsewhere
 	if(x>=0) return fmod(x,l);
 	else return fmod(fmod(x,l)+l,l);
 }
 
 long double moddist(long double x, long double l)
-{
+{ // COMMENT used only in functions of this file - not used elsewhere
 	return rmod(0.5*l+x,l)-0.5*l;
 }
 

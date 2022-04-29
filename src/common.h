@@ -58,9 +58,9 @@ extern long double l_pi;
 extern const gsl_rng_type * T;
 extern gsl_rng * r;
 
-inline long double ranf() {return gsl_rng_uniform (r);}//uniform random numbers in interval [0,1)
-inline long double ranfs() {return -1+2*ranf();}//uniform random numbers in interval [-1,1)
-inline long double sgn(long double x) {return (x>=0?1:-1);}//sign function
+inline long double ranf() {return gsl_rng_uniform (r);} // uniform random numbers in interval [0,1)
+inline long double ranfs() {return -1+2*ranf();} // uniform random numbers in interval [-1,1)
+inline long double sgn(long double x) {return (x>=0?1:-1);} // sign function
 
 vtype rand_orientation();
 

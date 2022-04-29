@@ -2,133 +2,124 @@
 #include "functions1.h"
 #include "mod.h"
 
-char name[100];
+char name[100]; //TODO: Check if 100 is enough for name // FIXME: Where is this used?
 
-vtype clustertype::cmass()
+vtype clustertype::cmass() // calculates center of mass for non-overlapping spheres
 {
-	int i;long double mc=0,r3;vtype res=null;
-	for(i=0;i<r.size();i++)
+	int i; long double mc=0,r3; vtype res=null;
+	for(i=0; i<r.size(); i++)
 	{
 		r3=R[i]*R[i]*R[i];
 		res=res+r3*(r[i]-r[0]);
 		mc=mc+r3;
 	}
-	res=(1/mc)*res;res=res+r[0];
+	res=(1/mc)*res; res=res+r[0];
 	return res;
 }
 
 
-void clustertype::erase()
+void clustertype::erase() // erases cluster
 {
 	r.erase(r.begin(),r.end());
 	R.erase(R.begin(),R.end());
 }
 
-void clustertype::init_sphere()
+void clustertype::init_sphere() // initialises spherical particle (cluster of a single sphere)
 {
 	contacts=0;
 	stable=false;
-	p1=-1;d1=-1;
-	p2=-1;d2=-1;
-	p3=-1;d3=-1;
-	tp=-1;td=-1;
+	p1=-1; d1=-1;
+	p2=-1; d2=-1;
+	p3=-1; d3=-1;
+	tp=-1; td=-1;
 	f=0;
 
 	// addition of a sphere
-	r.clear();R.clear();
+	r.clear(); R.clear();
 	vtype v(0,0,h0); //FIXME: Rename this, as v() is already a function in functions1.cpp. Not a severe problem, as the v() function is not used here and the v variable here is local, just to avoid future confusions. Or even better, we could give the v() function a more intuitive name, e.g. cross()
-	r.push_back(v);R.push_back(30.);
+	r.push_back(v); R.push_back(30.); // FIXME: Fixed radius of 30?
 	// end of sphere addition
 
 	cm=cmass();
 }
 
 
-void clustertype::init_axes_lines_mshuffle(int nsph_per_side)
+void clustertype::init_axes_lines_mshuffle(int nsph_per_side) // creates spiky particles (hexapods)
 {
-	r.clear();R.clear();
+	r.clear(); R.clear();
 	vtype n;
-	long double eps_sh=60*1e-4;
-	long double Rp=30.-eps_sh;
-	long double le=2*Rp*(nsph_per_side-1);
-	long double D=2*30.;
+	long double eps_sh=60*1e-4; // Small disturbance eps //TODO: Could this be a small overlap between spheres?
+	long double Rp=30.-eps_sh; // Reduced radius //FIXME: Fixed radius of thirty
+	long double le=2*Rp*(nsph_per_side-1); // Distance between spheres
+	long double D=2*30.; // Diameter //FIXME: Fixed radius of thirty
 
-	n=1*ex;
-	for(long double l=0;l<le+Rp/2.;l+=D) {vtype v=l*n;v.z()=v.z()+h0;vtype dv(eps_sh*ranfs(),eps_sh*ranfs(),eps_sh*ranfs());r.push_back(v+dv);R.push_back(Rp-eps_sh*ranf());}
+	//TODO Optimise the following into a single loop, to 
+	n= 1*ex; for(long double l=0; l<le+Rp/2.; l+=D) {vtype v=l*n; v.z()=v.z()+h0; vtype dv(eps_sh*ranfs(),eps_sh*ranfs(),eps_sh*ranfs()); r.push_back(v+dv); R.push_back(Rp-eps_sh*ranf());}
+	n=-1*ex; for(long double l=D; l<le+Rp/2.; l+=D) {vtype v=l*n; v.z()=v.z()+h0; vtype dv(eps_sh*ranfs(),eps_sh*ranfs(),eps_sh*ranfs()); r.push_back(v+dv); R.push_back(Rp-eps_sh*ranf());}
 
-	n=-1*ex;
-	for(long double l=D;l<le+Rp/2.;l+=D) {vtype v=l*n;v.z()=v.z()+h0;vtype dv(eps_sh*ranfs(),eps_sh*ranfs(),eps_sh*ranfs());r.push_back(v+dv);R.push_back(Rp-eps_sh*ranf());}
+	n= 1*ey; for(long double l=D; l<le+Rp/2.; l+=D) {vtype v=l*n; v.z()=v.z()+h0; vtype dv(eps_sh*ranfs(),eps_sh*ranfs(),eps_sh*ranfs()); r.push_back(v+dv); R.push_back(Rp-eps_sh*ranf());}
+	n=-1*ey; for(long double l=D; l<le+Rp/2.; l+=D) {vtype v=l*n; v.z()=v.z()+h0; vtype dv(eps_sh*ranfs(),eps_sh*ranfs(),eps_sh*ranfs()); r.push_back(v+dv); R.push_back(Rp-eps_sh*ranf());}
 
-	n=1*ey;
-	for(long double l=D;l<le+Rp/2.;l+=D) {vtype v=l*n;v.z()=v.z()+h0;vtype dv(eps_sh*ranfs(),eps_sh*ranfs(),eps_sh*ranfs());r.push_back(v+dv);R.push_back(Rp-eps_sh*ranf());}
-
-	n=-1*ey;
-	for(long double l=D;l<le+Rp/2.;l+=D) {vtype v=l*n;v.z()=v.z()+h0;vtype dv(eps_sh*ranfs(),eps_sh*ranfs(),eps_sh*ranfs());r.push_back(v+dv);R.push_back(Rp-eps_sh*ranf());}
-
-	n=1*ez;
-	for(long double l=D;l<le+Rp/2.;l+=D) {vtype v=l*n;v.z()=v.z()+h0;vtype dv(eps_sh*ranfs(),eps_sh*ranfs(),eps_sh*ranfs());r.push_back(v+dv);R.push_back(Rp-eps_sh*ranf());}
-
-	n=-1*ez;
-	for(long double l=D;l<le+Rp/2.;l+=D) {vtype v=l*n;v.z()=v.z()+h0;vtype dv(eps_sh*ranfs(),eps_sh*ranfs(),eps_sh*ranfs());r.push_back(v+dv);R.push_back(Rp-eps_sh*ranf());}
+	n= 1*ez; for(long double l=D; l<le+Rp/2.; l+=D) {vtype v=l*n; v.z()=v.z()+h0; vtype dv(eps_sh*ranfs(),eps_sh*ranfs(),eps_sh*ranfs()); r.push_back(v+dv); R.push_back(Rp-eps_sh*ranf());}
+	n=-1*ez; for(long double l=D; l<le+Rp/2.; l+=D) {vtype v=l*n; v.z()=v.z()+h0; vtype dv(eps_sh*ranfs(),eps_sh*ranfs(),eps_sh*ranfs()); r.push_back(v+dv); R.push_back(Rp-eps_sh*ranf());}
 
 	contacts=0;
 	stable=false;
-	p1=-1;d1=-1;
-	p2=-1;d2=-1;
-	p3=-1;d3=-1;
-	tp=-1;td=-1;
+	p1=-1; d1=-1;
+	p2=-1; d2=-1;
+	p3=-1; d3=-1;
+	tp=-1; td=-1;
 	f=0;
 	cm=cmass();
 }
 
-void clustertype::init_cube_mshuffle(int nsph_per_side)
+void clustertype::init_cube_mshuffle(int nsph_per_side) // creates cubic particles (hexahedrons)
 {
-	r.clear();R.clear();
+	r.clear(); R.clear();
 	vtype n;
 	long double eps_sh=60*1e-4;
-	long double Rp=30.-eps_sh;
-	long double le=2*30.*(nsph_per_side-1);
-	long double D=2*30.;
+	long double Rp=30.-eps_sh; //FIXME: Fixed radius of thirty
+	long double le=2*30.*(nsph_per_side-1); // Distance between spheres
+	long double D=2*30.; // Diameter //FIXME: Fixed radius of thirty
 
 	// xy plane
-	for(int i=0;i<nsph_per_side;i++)
-	for(int j=0;j<nsph_per_side;j++)
-	{vtype v=D*(i*ex+j*ey);v.z()=v.z()+h0;vtype dv(eps_sh*ranfs(),eps_sh*ranfs(),eps_sh*ranfs());r.push_back(v+dv);R.push_back(Rp-eps_sh*ranf());}
+	for(int i=0; i<nsph_per_side; i++)
+	for(int j=0; j<nsph_per_side; j++)
+	{vtype v=D*(i*ex+j*ey); v.z()=v.z()+h0; vtype dv(eps_sh*ranfs(),eps_sh*ranfs(),eps_sh*ranfs()); r.push_back(v+dv); R.push_back(Rp-eps_sh*ranf());}
 
 	// xy plane shifted
-	for(int i=0;i<nsph_per_side;i++)
-	for(int j=0;j<nsph_per_side;j++)
-	{vtype v=D*(i*ex+j*ey);v.z()=v.z()+h0;v.z()=v.z()+(nsph_per_side-1)*D;vtype dv(eps_sh*ranfs(),eps_sh*ranfs(),eps_sh*ranfs());r.push_back(v+dv);R.push_back(Rp-eps_sh*ranf());}
+	for(int i=0; i<nsph_per_side; i++)
+	for(int j=0; j<nsph_per_side; j++)
+	{vtype v=D*(i*ex+j*ey); v.z()=v.z()+h0; v.z()=v.z()+(nsph_per_side-1)*D; vtype dv(eps_sh*ranfs(),eps_sh*ranfs(),eps_sh*ranfs()); r.push_back(v+dv); R.push_back(Rp-eps_sh*ranf());}
 
 
 	// xz plane
-	for(int i=0;i<nsph_per_side;i++)
-	for(int j=1;j<nsph_per_side-1;j++)
-	{vtype v=D*(i*ex+j*ez);v.z()=v.z()+h0;vtype dv(eps_sh*ranfs(),eps_sh*ranfs(),eps_sh*ranfs());r.push_back(v+dv);R.push_back(Rp-eps_sh*ranf());}
+	for(int i=0; i<nsph_per_side; i++)
+	for(int j=1; j<nsph_per_side-1; j++)
+	{vtype v=D*(i*ex+j*ez); v.z()=v.z()+h0; vtype dv(eps_sh*ranfs(),eps_sh*ranfs(),eps_sh*ranfs()); r.push_back(v+dv); R.push_back(Rp-eps_sh*ranf());}
 
 	// xz plane shifted
-	for(int i=0;i<nsph_per_side;i++)
-	for(int j=1;j<nsph_per_side-1;j++)
-	{vtype v=D*(i*ex+j*ez);v.z()=v.z()+h0;v.y()=v.y()+(nsph_per_side-1)*D;vtype dv(eps_sh*ranfs(),eps_sh*ranfs(),eps_sh*ranfs());r.push_back(v+dv);R.push_back(Rp-eps_sh*ranf());}
+	for(int i=0; i<nsph_per_side; i++)
+	for(int j=1; j<nsph_per_side-1; j++)
+	{vtype v=D*(i*ex+j*ez); v.z()=v.z()+h0; v.y()=v.y()+(nsph_per_side-1)*D; vtype dv(eps_sh*ranfs(),eps_sh*ranfs(),eps_sh*ranfs()); r.push_back(v+dv); R.push_back(Rp-eps_sh*ranf());}
 
 
 	// yz plane
-	for(int i=1;i<nsph_per_side-1;i++)
-	for(int j=1;j<nsph_per_side-1;j++)
-	{vtype v=D*(i*ey+j*ez);v.z()=v.z()+h0;vtype dv(eps_sh*ranfs(),eps_sh*ranfs(),eps_sh*ranfs());r.push_back(v+dv);R.push_back(Rp-eps_sh*ranf());}
+	for(int i=1; i<nsph_per_side-1; i++)
+	for(int j=1; j<nsph_per_side-1; j++)
+	{vtype v=D*(i*ey+j*ez); v.z()=v.z()+h0; vtype dv(eps_sh*ranfs(),eps_sh*ranfs(),eps_sh*ranfs()); r.push_back(v+dv); R.push_back(Rp-eps_sh*ranf());}
 
 	// yz plane shifted
-	for(int i=1;i<nsph_per_side-1;i++)
-	for(int j=1;j<nsph_per_side-1;j++)
-	{vtype v=D*(i*ey+j*ez);v.z()=v.z()+h0;v.x()=v.x()+(nsph_per_side-1)*D;vtype dv(eps_sh*ranfs(),eps_sh*ranfs(),eps_sh*ranfs());r.push_back(v+dv);R.push_back(Rp-eps_sh*ranf());}
-
+	for(int i=1; i<nsph_per_side-1; i++)
+	for(int j=1; j<nsph_per_side-1; j++)
+	{vtype v=D*(i*ey+j*ez); v.z()=v.z()+h0; v.x()=v.x()+(nsph_per_side-1)*D; vtype dv(eps_sh*ranfs(),eps_sh*ranfs(),eps_sh*ranfs()); r.push_back(v+dv); R.push_back(Rp-eps_sh*ranf());}
 
 	contacts=0;
 	stable=false;
-	p1=-1;d1=-1;
-	p2=-1;d2=-1;
-	p3=-1;d3=-1;
-	tp=-1;td=-1;
+	p1=-1; d1=-1;
+	p2=-1; d2=-1;
+	p3=-1; d3=-1;
+	tp=-1; td=-1;
 	f=0;
 	cm=cmass();
 }
@@ -149,9 +140,9 @@ bool clustertype::settle(surroundtype& su) // sediments a particle
 
 		switch(contacts) // propagates cluster by one event
 		{
-			case 0: fall(su);break; // propagate when cluster is falling
-			case 1: rotate1(su);break; // propagate when cluster is rotating on one contact
-			case 2: rotate2(su);break; // propagate when cluster is rotating on two contacts
+			case 0: fall(su); break; // propagate when cluster is falling
+			case 1: rotate1(su); break; // propagate when cluster is rotating on one contact
+			case 2: rotate2(su); break; // propagate when cluster is rotating on two contacts
 		}
 
 		long double dcm1=norm(cm-cmp);
@@ -170,8 +161,8 @@ bool clustertype::settle(surroundtype& su) // sediments a particle
 
 			// check if there are contacts where one cluster particle touches two fixed particles (duplicate)
 			bool duplicate_exists=false;
-			for(int i=0;i<p.size()-1;i++)
-			for(int j=i+1;j<p.size();j++)
+			for(int i=0; i<p.size()-1; i++)
+			for(int j=i+1; j<p.size(); j++)
 			if(p[i]==p[j]) duplicate_exists=true;
 
 			if(!duplicate_exists) // if there are no duplicates find steepest descent trajectory
@@ -236,19 +227,19 @@ void clustertype::periodic(long double lx,long double ly) // shifts cluster back
 
 void clustertype::movecluster(const vtype& v) // moves the whole cluster by vector v
 {
-	for(int i=0;i<r.size();i++) r[i]=r[i]+v;
+	for(int i=0; i<r.size(); i++) r[i]=r[i]+v;
 	cm=cm+v;
 }
 
 
 void clustertype::fall(surroundtype& su)
 {
-	vector<fallattempt> atvec;fallattempt att;
+	vector<fallattempt> atvec; fallattempt att;
 
 	bfall(su,atvec); // add events for collisions with fixed spheres
 	gfall(atvec); // add events for collisions with the ground
 
-	if(atvec.size()==0) {ds("Error: fall: no events");exit(1);}//must be at least one future event
+	if(atvec.size()==0) {ds("Error: fall: no events"); exit(1);} // must be at least one future event
 	att=*max_element(atvec.begin(),atvec.end()); // choose the highest future event
 
 	step0(att,su); // move the cluster
@@ -256,20 +247,20 @@ void clustertype::fall(surroundtype& su)
 
 void clustertype::bfall(surroundtype& su,vector<fallattempt>& atvec) // possible collisons with fixed sphere
 {
-	int j,k;long double dlt;fallattempt att;
-	bool contact;long double zfc;
+	int j,k; long double dlt; fallattempt att;
+	bool contact; long double zfc;
 	vtype rp;
-	for(k=0;k<r.size();k++) // loop through all cluster particles
+	for(k=0; k<r.size(); k++) // loop through all cluster particles
 	{
-		zfc=h0;contact=false;
-		int ixl,ixr,iyl,iyr,izu,izd;findindex(r[k],R[k],ixl,ixr,iyl,iyr,izu);
-		for(int it=ixl;it<=ixr;it++) // loop through boxes containing candidates
-		for(int nt=iyl;nt<=iyr;nt++)
+		zfc=h0; contact=false;
+		int ixl,ixr,iyl,iyr,izu,izd; findindex(r[k],R[k],ixl,ixr,iyl,iyr,izu);
+		for(int it=ixl; it<=ixr; it++) // loop through boxes containing candidates
+		for(int nt=iyl; nt<=iyr; nt++)
 		{
 			int i=imod(it,nx);
 			int n=imod(nt,ny);
-			for(int m=su.izmax[i][n];m>=0&&(!contact||(contact&&m>=floor((zfc-R[k]-Rmax-zo)/dz)));m--)
-			for(int s=0;s<su.box[i][n][m].size();s++)
+			for(int m=su.izmax[i][n]; m>=0&&(!contact||(contact&&m>=floor((zfc-R[k]-Rmax-zo)/dz))); m--)
+			for(int s=0; s<su.box[i][n][m].size(); s++)
 			{
 				j=su.box[i][n][m][s];
 				rp=vmod(su.r[j],cm,lx,ly);
@@ -277,7 +268,7 @@ void clustertype::bfall(surroundtype& su,vector<fallattempt>& atvec) // possible
 				if(pcontact0(r[k],R[k],rp,su.R[j],dlt)) // test for collision by translation 
 				if(r[k].z()-dlt>rp.z()) // gradient check
 				{
-					if(dlt>0&&!contact) {contact=true;zfc=r[k].z()-dlt;}
+					if(dlt>0&&!contact) {contact=true; zfc=r[k].z()-dlt;}
 					if(dlt>0&&r[k].z()-dlt>zfc) zfc=r[k].z()-dlt;
 
 					att.contacts=1;
@@ -302,8 +293,8 @@ void clustertype::bfall(surroundtype& su,vector<fallattempt>& atvec) // possible
 
 void clustertype::gfall(vector<fallattempt>& atvec) // finds events for collision with the ground
 {
-	int k;long double dlt;fallattempt att;
-	for(k=0;k<r.size();k++) 
+	int k; long double dlt; fallattempt att;
+	for(k=0; k<r.size(); k++) 
 	{
 		dlt=r[k].z()-R[k];
 		att.stable=true;
@@ -342,7 +333,7 @@ void clustertype::step0(fallattempt att,surroundtype& su) // updates the cluster
 void clustertype::translate(long double dlt,int d1,int p1,surroundtype& su) // translates the cluster
 {
 	int i;
-	for(i=0;i<r.size();i++) 
+	for(i=0; i<r.size(); i++) 
 	{
 		r[i].z()-=dlt;
 	}
@@ -368,7 +359,7 @@ void clustertype::translate(long double dlt,int d1,int p1,surroundtype& su) // t
 
 void clustertype::rotate1(surroundtype& su) // moves the cluster by one event when cluster moves on one particle, structure is analogous to function fall
 {
-	vector<rotattempt> atvec;rotattempt att;
+	vector<rotattempt> atvec; rotattempt att;
 	vtype rp_temp=vmod(su.r[p1],cm,lx,ly);
 
 	// correction of the case where the center of mass is above the center of fixed particle
@@ -396,7 +387,7 @@ void clustertype::rotate1(surroundtype& su) // moves the cluster by one event wh
 	hrot(rp,atvec); // add event for rotation to horizontal 
 	bottomrot1(rp,atvec); // add event for rotation to hanging
 	grot1(rp,atvec); // add event for contact with the ground
-	if(atvec.size()==0) {ds("Error: rotate1: no events");exit(1);}
+	if(atvec.size()==0) {ds("Error: rotate1: no events"); exit(1);}
 
 	att=*max_element(atvec.begin(),atvec.end());
 	step1(att,rp); // moves cluster
@@ -410,7 +401,7 @@ void clustertype::steeperdphi(const vtype& rp,vector<rotattempt>& atvec) // deal
 	{		
 		rotinftype rotinf=rotinfphi;
 		vtype cmr=cm-rp;
-		vtype n=v(ez,cmr);n=(1/norm(n))*n;
+		vtype n=v(ez,cmr); n=(1/norm(n))*n;
 		rotinf.n=n;
 		
 		vtype cmc=rot(cm,rp,rotinf.cc,rotinf.ss,rotinf.n); // rotated center of mass
@@ -452,7 +443,7 @@ void clustertype::brot1(surroundtype& su,vector<rotattempt>& atvec) // search fo
 //find
 	long double rmax=0;
 	long double lmax=0;
-	for(int k=0;k<r.size();k++) // find the rotation angle between test positions of the cluster such that no events are missed
+	for(int k=0; k<r.size(); k++) // find the rotation angle between test positions of the cluster such that no events are missed
 	{
 		long double rt=distance_from_axis(r[k],rp,cm);
 		if(rt>rmax) 
@@ -470,7 +461,7 @@ void clustertype::brot1(surroundtype& su,vector<rotattempt>& atvec) // search fo
 	long double phidet=l_pi;
 	do//do while loop until first contact has been detected without doubt
 	{
-		for(int k=0;k<r.size();k++) // loop through cluster particles
+		for(int k=0; k<r.size(); k++) // loop through cluster particles
 		{
 			vtype point=rotpoint(r[k],rp,cm,phic); // position of the cluster particle according to current test angle
 			long double axisr=distance_from_axis(r[k],rp,cm);
@@ -487,18 +478,18 @@ void clustertype::brot1(surroundtype& su,vector<rotattempt>& atvec) // search fo
 			int iyl=floor((rref.y()-radius-yo)/dy);
 			int iyu=floor((rref.y()+radius-yo)/dy);
 
-			int izl=floor((rref.z()-radius-zo)/dz);if(izl<0) izl=0;
-			int izu=floor((rref.z()+radius-zo)/dz);if(izu>=nz) izu=nz-1;
+			int izl=floor((rref.z()-radius-zo)/dz); if(izl<0) izl=0;
+			int izu=floor((rref.z()+radius-zo)/dz); if(izu>=nz) izu=nz-1;
 
-			for(int ixnt=ixl;ixnt<=ixu;ixnt++)
-			for(int iynt=iyl;iynt<=iyu;iynt++)
-			for(int iznt=izl;iznt<=izu;iznt++)
+			for(int ixnt=ixl; ixnt<=ixu; ixnt++)
+			for(int iynt=iyl; iynt<=iyu; iynt++)
+			for(int iznt=izl; iznt<=izu; iznt++)
 			{
 				int ixn=imod(ixnt,nx);
 				int iyn=imod(iynt,ny);
 				int izn=iznt; 
 
-				for(int jj=0;jj<su.box[ixn][iyn][izn].size();jj++)
+				for(int jj=0; jj<su.box[ixn][iyn][izn].size(); jj++)
 				{
 					j=su.box[ixn][iyn][izn][jj]; // index of the candidate sphere
 					vtype rp2=vmod(su.r[j],cm,lx,ly); // periodic conditions applied to candidate sphere
@@ -510,9 +501,9 @@ void clustertype::brot1(surroundtype& su,vector<rotattempt>& atvec) // search fo
 						{
 							vector<rotinftype> rotv;
 							rotv.erase(rotv.begin(),rotv.end());
-							rotv.push_back(rotinf1);rotv.push_back(rotinf2);
+							rotv.push_back(rotinf1); rotv.push_back(rotinf2);
 
-							for(int ir=0;ir<2;ir++) // consider both solutions for collision
+							for(int ir=0; ir<2; ir++) // consider both solutions for collision
 							{
 								rotinf=rotv[ir];
 
@@ -523,13 +514,13 @@ void clustertype::brot1(surroundtype& su,vector<rotattempt>& atvec) // search fo
 								if(rightside(cm-rp,cmc-rp,rotinf.n)&&g(rp,cmc,rcc,rp2)<0&&cmc.z()<cm.z()+epsz) // final check if collision is a valid future event
 								{
 									vector<vtype> rps;
-									rps.push_back(rp);rps.push_back(rp2);
+									rps.push_back(rp); rps.push_back(rp2);
 									vector<vtype> rds;
-									rds.push_back(rdc);rds.push_back(rcc);
+									rds.push_back(rdc); rds.push_back(rcc);
 									vector<int> p;
-									p.push_back(p1);p.push_back(j);
+									p.push_back(p1); p.push_back(j);
 									vector<int> d;
-									d.push_back(d1);d.push_back(k);
+									d.push_back(d1); d.push_back(k);
 									find_steppest_descent(rps,rds,p,d,cmc,att); // consider all contacts and find steepest descent trajectory
 									att.rotinf=rotinf; 
 									atvec.push_back(att); // add event
@@ -539,8 +530,8 @@ void clustertype::brot1(surroundtype& su,vector<rotattempt>& atvec) // search fo
 									if(att.rotinf.cc>1) att.rotinf.cc=att.rotinf.cc-1e-12;
 									long double phidetc=acos(att.rotinf.cc); // rotation angle for the current collision
 									if(phidetc<phidet) phidet=phidetc; // update smallest colision angle
-								}//right side if
-							}//+- solution for loop
+								} // right side if
+							} // +- solution for loop
 						}
 					}
 				}
@@ -579,7 +570,7 @@ void clustertype::grot1(const vtype& rp,vector<rotattempt>& atvec) // contact wi
 {
 	rotattempt att;
 	rotinftype rotinf1,rotinf2;
-	for(int i=0;i<r.size();i++)
+	for(int i=0; i<r.size(); i++)
 	{
 		if(toground1(rp,cm,r[i],R[i],rotinf1,rotinf2)) // finds position (if any) where cluster sphere i makes contact with the ground
 		{
@@ -630,7 +621,7 @@ void clustertype::bottomrot1(const vtype& rp,vector<rotattempt>& atvec) // event
 	rotinftype rotinf;
 	tobelow1(cm,rp,rotinf); // finds amount of rotation such that the center of mass is below the fixed particle
 
-	att.contacts=30;
+	att.contacts=30; //FIXME: Fixed radius of thirty
 	att.stable=true;
 	att.p1=-1;
 	att.d1=-1;
@@ -658,19 +649,19 @@ void clustertype::step1(const rotattempt& att,const vtype& rp) // updates the cl
 	tp=att.tp;
 	f=att.f;
 	cm=rot(cm,rp,att.rotinf.cc,att.rotinf.ss,att.rotinf.n);
-	for(int i=0;i<r.size();i++) r[i]=rot(r[i],rp,att.rotinf.cc,att.rotinf.ss,att.rotinf.n);
+	for(int i=0; i<r.size(); i++) r[i]=rot(r[i],rp,att.rotinf.cc,att.rotinf.ss,att.rotinf.n);
 }
 
 void clustertype::rotate2(surroundtype& su) // propagates cluster by one event when cluster has two contacts
 {
-	vector<rotattempt> atvec;rotattempt att;
+	vector<rotattempt> atvec; rotattempt att;
 
 	vtype rp1_temp=vmod(su.r[p1],cm,lx,ly);
 	vtype rp2_temp=vmod(su.r[p2],cm,lx,ly);
 
-	vtype n=rp2_temp-rp1_temp;n=(1/norm(n))*n;
-	vtype cmr=cm-rp1_temp;cmr=(1/norm(cmr))*cmr;
-	vtype vcmn=v(n,cmr);vcmn=(1/norm(vcmn))*vcmn;
+	vtype n=rp2_temp-rp1_temp; n=(1/norm(n))*n;
+	vtype cmr=cm-rp1_temp; cmr=(1/norm(cmr))*cmr;
+	vtype vcmn=v(n,cmr); vcmn=(1/norm(vcmn))*vcmn;
 
 	vtype sh;
 	bool is_middle=fabs(s(ez,vcmn))<60*1e-9;
@@ -681,7 +672,7 @@ void clustertype::rotate2(surroundtype& su) // propagates cluster by one event w
 		{
 			sh_val=ranfs();
 		}
-		while(fabs(sh_val)<0.5);	
+		while(fabs(sh_val)<0.5);
 		sh=60*1e-9*sh_val*vcmn;
 		su.r[p1]=su.r[p1]+sh; // moves fixed particle by small amount when cm is exactly on top of rotation axis
 	}
@@ -696,7 +687,7 @@ void clustertype::rotate2(surroundtype& su) // propagates cluster by one event w
 	bottomrot2(rp1,rp2,atvec); // add events for the case Fig6c of the paper
 	grot2(rp1,rp2,atvec); // add events for contact with the ground
 
-	if(atvec.size()==0) {ds("Error: rotate2: no events");exit(1);}
+	if(atvec.size()==0) {ds("Error: rotate2: no events"); exit(1);}
 
 	att=*max_element(atvec.begin(),atvec.end()); // choose earliest event
 	step2(att,su,rp1); // propagate cluster by chosen event
@@ -707,17 +698,17 @@ void clustertype::rotate2(surroundtype& su) // propagates cluster by one event w
 void clustertype::steeperdphi2(const vtype& rp1,const vtype& rp2,vector<rotattempt>& atvec) // adds event for frustrated situation (if any) with two contacts 
 {
 	// it is guarantied that rp1 corresponds to p1 and rp2 to p2, see function rotate2()
-	vector<vtype> rp;rp.push_back(rp1);rp.push_back(rp2);
-	vector<vtype> rd;rd.push_back(r[d1]);rd.push_back(r[d2]);
-	vector<int> p;p.push_back(p1);p.push_back(p2);
-	vector<int> d;d.push_back(d1);d.push_back(d2);
+	vector<vtype> rp; rp.push_back(rp1); rp.push_back(rp2);
+	vector<vtype> rd; rd.push_back(r[d1]); rd.push_back(r[d2]);
+	vector<int> p; p.push_back(p1); p.push_back(p2);
+	vector<int> d; d.push_back(d1); d.push_back(d2);
 
 	rotattempt att;
 	find_steppest_descent(rp,rd,p,d,cm,att); // find steepest descent trajectory
 
 	if(att.contacts<contacts) // is it possible to move with less contacts?
 	{
-		vtype cmr=cm-rp1;vtype n=rp2-rp1;n=(1/norm(n))*n;
+		vtype cmr=cm-rp1; vtype n=rp2-rp1; n=(1/norm(n))*n;
 		if(s(ez,v(n,cm-rp1))>0) n=-1*n;
 
 		rotinftype rotinf=rotinfphi;
@@ -728,15 +719,15 @@ void clustertype::steeperdphi2(const vtype& rp1,const vtype& rp2,vector<rotattem
 		if(rightside(cm-rp1,cmc-rp1,rotinf.n))
 		{
 			// vectors rp and rd
-			vector<vtype> rp;rp.push_back(rp1);rp.push_back(rp2);
+			vector<vtype> rp; rp.push_back(rp1); rp.push_back(rp2);
 
 			vtype rd1r=rot(r[d1],rp1,rotinf.cc,rotinf.ss,rotinf.n);
 			vtype rd2r=rot(r[d2],rp1,rotinf.cc,rotinf.ss,rotinf.n);
-			vector<vtype> rd;rd.push_back(rd1r);rd.push_back(rd2r);
+			vector<vtype> rd; rd.push_back(rd1r); rd.push_back(rd2r);
 			
 			// indices of contacting particles
-			vector<int> p;p.push_back(p1);p.push_back(p2);
-			vector<int> d;d.push_back(d1);d.push_back(d2);
+			vector<int> p; p.push_back(p1); p.push_back(p2);
+			vector<int> d; d.push_back(d1); d.push_back(d2);
 
 			rotattempt att;
 			find_steppest_descent(rp,rd,p,d,cmc,att); // find steepest descent after the cluster has been rotated
@@ -775,7 +766,7 @@ void clustertype::brot2(surroundtype& su,vector<rotattempt>& atvec) // find cont
 
 	long double rmax=0;
 	long double lmax=0;
-	for(int k=0;k<r.size();k++)
+	for(int k=0; k<r.size(); k++)
 	{
 		long double rt=distance_from_axis2(r[k],rp,rp2);
 		if(rt>rmax) 
@@ -794,7 +785,7 @@ void clustertype::brot2(surroundtype& su,vector<rotattempt>& atvec) // find cont
 	long double phidet=l_pi;
 	do
 	{
-		for(int k=0;k<r.size();k++)
+		for(int k=0; k<r.size(); k++)
 		{
 			vtype point=rotpoint2(r[k],rp,rp2,cm,phic);
 			long double axisr=distance_from_axis2(r[k],rp,rp2);
@@ -809,18 +800,18 @@ void clustertype::brot2(surroundtype& su,vector<rotattempt>& atvec) // find cont
 			int iyl=floor((rref.y()-radius-yo)/dy);
 			int iyu=floor((rref.y()+radius-yo)/dy);
 
-			int izl=floor((rref.z()-radius-zo)/dz);if(izl<0) izl=0;
-			int izu=floor((rref.z()+radius-zo)/dz);if(izu>=nz) izu=nz-1;
+			int izl=floor((rref.z()-radius-zo)/dz); if(izl<0) izl=0;
+			int izu=floor((rref.z()+radius-zo)/dz); if(izu>=nz) izu=nz-1;
 
-			for(int ixnt=ixl;ixnt<=ixu;ixnt++)
-			for(int iynt=iyl;iynt<=iyu;iynt++)
-			for(int iznt=izl;iznt<=izu;iznt++)
+			for(int ixnt=ixl; ixnt<=ixu; ixnt++)
+			for(int iynt=iyl; iynt<=iyu; iynt++)
+			for(int iznt=izl; iznt<=izu; iznt++)
 			{
 				int ixn=imod(ixnt,nx);
 				int iyn=imod(iynt,ny);
 				int izn=iznt;
 
-				for(int jj=0;jj<su.box[ixn][iyn][izn].size();jj++)
+				for(int jj=0; jj<su.box[ixn][iyn][izn].size(); jj++)
 				{
 					int j=su.box[ixn][iyn][izn][jj];
 					vtype rp3=vmod(su.r[j],cm,lx,ly);
@@ -833,9 +824,9 @@ void clustertype::brot2(surroundtype& su,vector<rotattempt>& atvec) // find cont
 
 							vector<rotinftype> rotv;
 							rotv.erase(rotv.begin(),rotv.end());
-							rotv.push_back(rotinf1);rotv.push_back(rotinf2);
+							rotv.push_back(rotinf1); rotv.push_back(rotinf2);
 
-							for(int ir=0;ir<2;ir++)
+							for(int ir=0; ir<2; ir++)
 							{
 								rotinf=rotv[ir];
 								vtype cmc=rot(cm,rp,rotinf.cc,rotinf.ss,rotinf.n);
@@ -845,13 +836,13 @@ void clustertype::brot2(surroundtype& su,vector<rotattempt>& atvec) // find cont
 								if(rightside(cm-rp,cmc-rp,rotinf.n)&&g2(rp,rp2,cmc,rcr,rp3)<0&&cmc.z()<cm.z()+epsz)
 								{
 									vector<vtype> rps;
-									rps.push_back(rp);rps.push_back(rp2);rps.push_back(rp3);
+									rps.push_back(rp); rps.push_back(rp2); rps.push_back(rp3);
 									vector<vtype> rds;
-									rds.push_back(rd1c);rds.push_back(rd2c);rds.push_back(rcr);
+									rds.push_back(rd1c); rds.push_back(rd2c); rds.push_back(rcr);
 									vector<int> p;
-									p.push_back(p1);p.push_back(p2);p.push_back(j);
+									p.push_back(p1); p.push_back(p2); p.push_back(j);
 									vector<int> d;
-									d.push_back(d1);d.push_back(d2);d.push_back(k);
+									d.push_back(d1); d.push_back(d2); d.push_back(k);
 									find_steppest_descent(rps,rds,p,d,cmc,att);
 									att.rotinf=rotinf;
 									atvec.push_back(att);
@@ -859,8 +850,8 @@ void clustertype::brot2(surroundtype& su,vector<rotattempt>& atvec) // find cont
 	if(att.rotinf.cc>1) att.rotinf.cc=att.rotinf.cc-1e-12;
 									long double phidetc=acos(att.rotinf.cc);
 									if(phidetc<phidet) phidet=phidetc;
-								}//right side if
-							}//soulution for loop
+								} // right side if
+							} // soulution for loop
 						}
 					}
 				}
@@ -899,7 +890,7 @@ void clustertype::grot2(const vtype rp1,const vtype rp2,vector<rotattempt>& atve
 {
 	rotattempt att;
 	rotinftype rotinf1,rotinf2;
-	for(int i=0;i<r.size();i++)
+	for(int i=0; i<r.size(); i++)
 	{
 		if(toground2(rp1,rp2,cm,r[i],R[i],rotinf1,rotinf2))
 		{
@@ -954,12 +945,12 @@ void clustertype::hrot2(const vtype& rp1,const vtype& rp2,vector<rotattempt>& at
 		{
 
 			vector<rotinftype> rotv;
-			rotv.push_back(rotinf1);rotv.push_back(rotinf2);
-			for(int i=0;i<rotv.size();i++)
+			rotv.push_back(rotinf1); rotv.push_back(rotinf2);
+			for(int i=0; i<rotv.size(); i++)
 			{
 				rotinftype rotinf=rotv[i];
 				vtype cmc=rot(cm,rp1,rotinf.cc,rotinf.ss,rotinf.n);
-				vtype rd1r=rot(r[d1],rp1,rotinf.cc,rotinf.ss,rotinf.n);			
+				vtype rd1r=rot(r[d1],rp1,rotinf.cc,rotinf.ss,rotinf.n);
 				vtype rd2r=rot(r[d2],rp1,rotinf.cc,rotinf.ss,rotinf.n);
 				if(rightside(cm-rp1,cmc-rp1,rotinf.n)&&rd2r.z()<rp2.z())
 				{
@@ -988,12 +979,12 @@ void clustertype::hrot2(const vtype& rp1,const vtype& rp2,vector<rotattempt>& at
 		{
 
 			vector<rotinftype> rotv;
-			rotv.push_back(rotinf1);rotv.push_back(rotinf2);
-			for(int i=0;i<rotv.size();i++)
+			rotv.push_back(rotinf1); rotv.push_back(rotinf2);
+			for(int i=0; i<rotv.size(); i++)
 			{
 				rotinftype rotinf=rotv[i];
 				vtype cmc=rot(cm,rp2,rotinf.cc,rotinf.ss,rotinf.n);
-				vtype rd1r=rot(r[d1],rp2,rotinf.cc,rotinf.ss,rotinf.n);			
+				vtype rd1r=rot(r[d1],rp2,rotinf.cc,rotinf.ss,rotinf.n);
 				vtype rd2r=rot(r[d2],rp2,rotinf.cc,rotinf.ss,rotinf.n);
 				if(rightside(cm-rp2,cmc-rp2,rotinf.n)&&rd1r.z()<rp1.z())
 				{
@@ -1238,7 +1229,7 @@ bool clustertype::positivecircle(const vtype& rp1,const vtype& rp2,const vtype& 
 	vtype rdr=rot(rd2,rp1,rotinf.cc,rotinf.ss,rotinf.n);
 
 	rotinftype rotinf180;
-	vtype n=v(ez,cmr-rp1);n=(1/norm(n))*n;
+	vtype n=v(ez,cmr-rp1); n=(1/norm(n))*n;
 	rotinf180.cc=-1;
 	rotinf180.ss=0;
 	rotinf180.n=n;
@@ -1262,7 +1253,7 @@ void clustertype::step2(const rotattempt& att,surroundtype& su,const vtype& rp) 
 	tp=att.tp;
 	f=att.f;
 	cm=rot(cm,rp,att.rotinf.cc,att.rotinf.ss,att.rotinf.n);
-	for(int i=0;i<r.size();i++) r[i]=rot(r[i],rp,att.rotinf.cc,att.rotinf.ss,att.rotinf.n);
+	for(int i=0; i<r.size(); i++) r[i]=rot(r[i],rp,att.rotinf.cc,att.rotinf.ss,att.rotinf.n);
 }
 
 
@@ -1276,7 +1267,7 @@ void clustertype::find_steppest_descent(vector<vtype> rp,vector<vtype> rd,vector
 	int contact_number=rp.size();
 	// Add event for cluster falling, if allowed
 	bool can_fall=true;
-	for(int i=0;i<contact_number;i++) {can_fall=can_fall&&rd[i].z()<rp[i].z();}
+	for(int i=0; i<contact_number; i++) {can_fall=can_fall&&rd[i].z()<rp[i].z();}
 	if(can_fall) 
 	{
 		gatt.contacts=0;
@@ -1296,10 +1287,10 @@ void clustertype::find_steppest_descent(vector<vtype> rp,vector<vtype> rd,vector
 	}
 
 	// Add trajectories for rolling on one contact, if they exist 
-	for(int i=0;i<contact_number;i++)
+	for(int i=0; i<contact_number; i++)
 	{
 		bool can_rotate=true;
-		for(int j=0;j<contact_number;j++) 
+		for(int j=0; j<contact_number; j++) 
 		if(i!=j) 
 		{
 			can_rotate=can_rotate&&g(rp[i],cmc,rd[j],rp[j])>epstang;
@@ -1325,11 +1316,11 @@ void clustertype::find_steppest_descent(vector<vtype> rp,vector<vtype> rd,vector
 	}
 
 	// Add trajectories for rolling on two contacts, if they exist
-	for(int i=1;i<contact_number;i++)
-	for(int j=0;j<i;j++)
+	for(int i=1; i<contact_number; i++)
+	for(int j=0; j<i; j++)
 	{
 		bool can_roll=true;
-		for(int k=0;k<contact_number;k++) if(k!=i&&k!=j) {can_roll=can_roll&&g2(rp[i],rp[j],cmc,rd[k],rp[k])>epstang;}
+		for(int k=0; k<contact_number; k++) if(k!=i&&k!=j) {can_roll=can_roll&&g2(rp[i],rp[j],cmc,rd[k],rp[k])>epstang;}
 		if(can_roll)
 		{
 			gatt.contacts=2;
@@ -1352,13 +1343,13 @@ void clustertype::find_steppest_descent(vector<vtype> rp,vector<vtype> rd,vector
 	if(!gradevent.empty()) // if there are trajectories find the steepest
 	{
 		gatt=gradevent[0];
-		for(int ig=0;ig<gradevent.size();ig++)
+		for(int ig=0; ig<gradevent.size(); ig++)
 		{
 			if(gradevent[ig].gz<gatt.gz) gatt=gradevent[ig];
 		}
 		att.contacts=gatt.contacts;
 		att.stable=gatt.stable;
-		att.d1=gatt.d1;	
+		att.d1=gatt.d1;
 		att.p1=gatt.p1;
 		att.d2=gatt.d2;
 		att.p2=gatt.p2;
@@ -1373,7 +1364,7 @@ void clustertype::find_steppest_descent(vector<vtype> rp,vector<vtype> rd,vector
 	{
 		att.contacts=rp.size();
 		att.stable=true;
-		att.d1=d[0];	
+		att.d1=d[0];
 		att.p1=p[0];
 		att.d2=d[1];
 		att.p2=p[1];
@@ -1414,7 +1405,7 @@ void clustertype::randrot()
 
 	vtype nzp=v(nxp,nyp); // nzp normal to both nxp and nyp
 
-	for(int i=0;i<r.size();i++) 
+	for(int i=0; i<r.size(); i++) 
 	{
 		r[i]=cm+(r[i].x()-cm.x())*nxp+(r[i].y()-cm.y())*nyp+(r[i].z()-cm.z())*nzp;
 	}

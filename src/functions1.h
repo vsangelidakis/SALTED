@@ -4,7 +4,21 @@
 #include "surround.h"
 #include "cluster.h"
 
-// see cpp file for descriptions of each function
+/* Type		function		description */
+// void		initrand:		initalises random number generator (apart from seed)
+// void		load_parameters:	reads file with input parameters
+// vtype	cmass:			calculates the center of mass of the packing
+// long double	mass:			calculates the mass of the packing assuming that sphere with radius 30 has unit mass
+// int		checkinters:		calculates the number of overlaps in the sediment
+// bool		checkinters:		calculates the number of overlaps between the cluster spheres and the sediment
+// void		find_cluster_contacts:	finds number of contacts that the cluster has with its surroundings
+// void		unload:			adds the cluster c to the fixed particles
+// void		unloadsphere:		adds the cluster c to the fixed particles
+// void		output:			outputs the fixed particles to a file
+// void		output:			outputs a set of clusters to a single file
+// void		writedetails:		outputs to a file the number of clusters sedimented (input variable size) and the number of intersections in the sediment (also input parameter)
+// void		write2cm:		outputs to a file the filling height of the sediment
+
 void initrand();
 void load_parameters(const char* inputfile);
 
