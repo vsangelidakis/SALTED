@@ -222,11 +222,43 @@ void unloadsphere(const vtype& v,int ii,long double R,surroundtype& su)
 	if(iz>su.izmax[ix][iy]) su.izmax[ix][iy]=iz;
 }
 
-// outputs the fixed particles to a file
+
+// outputs all fixed particles to a VTK file
+void outputVTK(surroundtype& su,string fname) 
+{
+	int i; ofstream myfile;
+	myfile.open(fname.c_str());
+	myfile.precision(15);
+	
+	myfile<<"# vtk DataFile Version 3.0."<<endl;
+	myfile<<"comment"<<endl;
+	myfile<<"ASCII"<<endl;
+	
+	myfile<<" "<<endl;
+	myfile<<"DATASET POLYDATA"<<endl;
+	myfile<<"POINTS "<<su.r.size()<<" double"<<endl;
+	for(i=0; i<su.r.size(); i++) {myfile<<su.r[i].x()<<" "<<su.r[i].y()<<" "<<su.r[i].z()<<endl;}	// write x,y,z for each sphere
+
+	myfile<<" "<<endl;	
+	myfile<<"POINT_DATA "<<su.r.size()<<endl;
+	myfile<<"SCALARS radius double 1"<<endl; // write r for each sphere
+	myfile<<"LOOKUP_TABLE default"<<endl;
+	for(i=0; i<su.r.size(); i++) {myfile<<su.R[i]<<endl;}	
+
+	myfile<<"SCALARS id int 1"<<endl; // write id for each cluster forming the "surrounding"
+	myfile<<"LOOKUP_TABLE default"<<endl;
+	for(i=0; i<su.r.size(); i++) {myfile<<su.id[i]<<endl;}	
+
+	
+	myfile.close();
+}
+
+
+// outputs all fixed particles to a file
 void output(surroundtype& su,string fname) 
 {
 	int i; ofstream myfile;
-	myfile.open (fname.c_str());
+	myfile.open(fname.c_str());
 	myfile.precision(15);
 	for(i=0; i<su.r.size(); i++) {myfile<<su.r[i].x()<<" "<<su.r[i].y()<<" "<<su.r[i].z()<<" "<<su.R[i]<<endl;}
 	myfile.close();
