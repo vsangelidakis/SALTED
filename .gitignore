@@ -1,7 +1,7 @@
 src_BACKUP_2022_04_25
 src_BACKUP_2022_04_27
 *.o
-/src/deposit
-/src/details/
-/src/positions/
-/src/cms/
+src/deposit
+src/details/
+src/positions/
+src/cms/
