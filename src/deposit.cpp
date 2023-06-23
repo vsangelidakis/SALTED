@@ -4,8 +4,6 @@
 #include "cluster.h"
 #include "numerics.h"
 
-
-
 int main(int argc,char** argv)
 {	
 	initrand(); // initialisation of random number generator (apart from seed)
